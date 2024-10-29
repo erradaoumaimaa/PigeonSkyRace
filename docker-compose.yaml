@@ -3,7 +3,7 @@ version: '3.8'
 services:
   mongodb:
     image: mongo:latest
-    container_name: mongodb
+    container_name: mongodbDouaa
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
@@ -15,7 +15,7 @@ services:
 
   mongo-express:
     image: mongo-express:latest
-    container_name: mongo-express
+    container_name: mongo-express-admin
     restart: always
     ports:
       - "8081:8081"
@@ -30,7 +30,5 @@ services:
 
 volumes:
   mongodb_data:
-
-networks:
-  default:
-    name: mongodb_network
+    name: mongodb_data
+   
