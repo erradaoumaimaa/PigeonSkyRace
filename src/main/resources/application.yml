@@ -1,4 +1,10 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://admin_user:secure_password@mongo:27017/pigeonDB
+      uri: mongodb://admin:admin@mongodb:27017/pigeonSkyRace?connectTimeoutMS=30000
+      authentication-database: admin
+      username: admin
+      password: admin
+      database: pigeonSkyRace
+      port: 27017
+      host: mongodb
