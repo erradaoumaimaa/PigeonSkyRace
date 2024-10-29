@@ -1,28 +1,33 @@
 package com.pigeonskyrace.model;
 
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+@Data
 @Document(collection = "pigeons")
 public class Pigeon {
     @Id
     private String id;
-
-    @NotBlank(message = "Le numéro de bague est obligatoire")
-    @Size(min = 3, max = 10, message = "Le numéro de bague doit avoir entre 3 et 10 caractères")
     private String numeroBague;
-
-    @NotBlank(message = "Le sexe doit être spécifié")
     private String sexe;
-
-    @NotNull(message = "L'âge est obligatoire")
-    @Positive(message = "L'âge doit être un nombre positif")
     private Integer age;
-
     private String couleur;
+
+    // Constructeur sans id
+    public Pigeon(String numeroBague, String sexe, Integer age, String couleur) {
+        this.numeroBague = numeroBague;
+        this.sexe = sexe;
+        this.age = age;
+        this.couleur = couleur;
+    }
+
+    // Constructeur avec id
+    public Pigeon(String id, String numeroBague, String sexe, Integer age, String couleur) {
+        this.id = id;
+        this.numeroBague = numeroBague;
+        this.sexe = sexe;
+        this.age = age;
+        this.couleur = couleur;
+    }
 }
