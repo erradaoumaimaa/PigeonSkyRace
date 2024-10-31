@@ -30,4 +30,45 @@ public class Pigeon {
         this.age = age;
         this.couleur = couleur;
     }
+
+
+    public String getNumeroBague() {
+        return numeroBague;
+    }
+
+    public void setNumeroBague(String numeroBague) {
+        this.numeroBague = numeroBague;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getSexe() {
+        return sexe;
+    }
+
+    public void setSexe(String sexe) {
+        this.sexe = sexe;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getCouleur() {
+        return couleur;
+    }
+
+    public void setCouleur(String couleur) {
+        this.couleur = couleur;
+    }
 }
