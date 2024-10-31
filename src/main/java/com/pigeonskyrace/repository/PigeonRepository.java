@@ -1,4 +1,9 @@
 package com.pigeonskyrace.repository;
 
-public interface PigeonRepository {
+import com.pigeonskyrace.model.Pigeon;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface PigeonRepository  extends MongoRepository<Pigeon,String> {
+
+
 }
