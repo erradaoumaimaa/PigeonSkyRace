@@ -7,8 +7,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -26,4 +29,12 @@ public class Colombier {
 
     @Size(max = 100, message = "Les coordonnées GPS ne doivent pas dépasser 100 caractères")
     private String coordonneeGPS;
+
+    // Référence vers l'utilisateur qui possède ce colombier
+    @DBRef
+    private User proprietaire;
+
+    // Liste des pigeons associés à ce colombier
+    @DBRef
+    private List<Pigeon> pigeons;
 }

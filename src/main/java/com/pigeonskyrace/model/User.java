@@ -39,11 +39,9 @@ public class User {
     @Email(message = "Email should be valid")
     private String email;
 
-    private Role role ;
-    //relation one to many avec Pigeon
-    @DBRef
-    private List<Pigeon> pigeons;
-    // Référence au colombier
-    private Colombier colombier;
+    private Role role;
 
+    // Liste des colombiers associés à cet utilisateur
+    @DBRef
+    private List<Colombier> colombiers;
 }
