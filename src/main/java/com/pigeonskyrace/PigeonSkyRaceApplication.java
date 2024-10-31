@@ -17,10 +17,10 @@ public class PigeonSkyRaceApplication {
 	@Bean
 	CommandLineRunner runner(PigeonRepository pigeonRepository) {
 		return args -> {
-			System.out.println("Tentative d'insertion du pigeon...");
-			Pigeon pigeon = new Pigeon("B12345", "Femelle", 2, "Gris");
-			pigeonRepository.insert(pigeon);
-			System.out.println("Pigeon ajouté à la base de données : " + pigeon);
+//			System.out.println("Tentative d'insertion du pigeon...");
+//			Pigeon pigeon = new Pigeon("B12345", "Femelle", 2, "Gris");
+//			pigeonRepository.insert(pigeon);
+//			System.out.println("Pigeon ajouté à la base de données : " + pigeon);
 		};
 	}
 
