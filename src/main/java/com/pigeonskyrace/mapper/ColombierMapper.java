@@ -12,7 +12,6 @@ public interface ColombierMapper {
 
     Colombier toColombier(UserReponseDTO.ColombierRequestDTO colombierRequestDTO);
    @Mapping(target = "proprietaireId", source = "proprietaire.id")
-   //@Mapping(target = "proprietaireId", source = "proprietaireId")
     ColombierReponseDTO toColombierResponseDTO(Colombier colombier);
 
 

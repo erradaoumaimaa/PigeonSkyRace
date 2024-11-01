@@ -7,6 +7,7 @@ import com.pigeonskyrace.model.Pigeon;
 import com.pigeonskyrace.service.ColombierService;
 import org.bson.types.ObjectId;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -16,6 +17,7 @@ public abstract class PigeonMapper {
     @Autowired
     private ColombierService colombierService;
 
+    @Mapping(target = "sexe", source = "sexe")
     public abstract Pigeon toPigeon(PigeonRequestDTO pigeonRequestDTO);
 
     public abstract PigeonResponseDTO toPigeonResponseDTO(Pigeon pigeon);
