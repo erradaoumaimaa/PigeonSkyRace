@@ -1,6 +1,9 @@
 package com.pigeonskyrace.dto.reponse;
 
 import com.pigeonskyrace.model.enums.Role;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
 import org.bson.types.ObjectId;
 
 import java.util.List;
@@ -59,5 +62,16 @@ public class UserReponseDTO {
         this.email = email;
         this.role = role;
         this.colombiers = colombiers;
+    }
+
+    @Data
+    public static class ColombierRequestDTO {
+
+        @NotBlank(message = "Le nom du colombier est requis")
+        @Size(max = 50, message = "Le nom du colombier ne doit pas dépasser 50 caractères")
+        private String nomColombier;
+
+        @Size(max = 100, message = "Les coordonnées GPS ne doivent pas dépasser 100 caractères")
+        private String coordonneeGPS;
     }
 }
