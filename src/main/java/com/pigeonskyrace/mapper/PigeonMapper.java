@@ -17,7 +17,6 @@ public abstract class PigeonMapper {
     @Autowired
     private ColombierService colombierService;
 
-    @Mapping(target = "sexe", source = "sexe")
     public abstract Pigeon toPigeon(PigeonRequestDTO pigeonRequestDTO);
 
     public abstract PigeonResponseDTO toPigeonResponseDTO(Pigeon pigeon);

@@ -33,7 +33,7 @@ public class PigeonSkyRaceApplication {
 	return args -> {
 	System.out.println("Tentative d'insertion du colombier...");
 	Colombier colombier = new Colombier();
-		colombier.setNomColombier("Colombier-11");
+		colombier.setNomColombier("Colombier-1");
 	colombier.setCoordonneeGPS("48.9866, 2.3522");
 	colombierRepository.insert(colombier);
 	System.out.println("Colombier ajouté à la base de données : " + colombier);
