@@ -11,13 +11,8 @@ import org.mapstruct.factory.Mappers;
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    // Convertit un UserRequestDto en User
-    @Mapping(target = "id", ignore = true) // ID généré automatiquement par MongoDB
-    @Mapping(target = "colombiers", ignore = true) // Colonnes de colombiers non gérées ici
-    User toUser(UserRequestDTO dto);
+    User toUser(UserRequestDTO userRequestDto);
 
-    // Convertit un User en UserResponseDto
-    @Mapping(target = "colombiers", source = "colombiers.id")
+    @Mapping(target = "colombiers", ignore = true)
     UserReponseDTO toUserResponseDto(User user);
-
 }

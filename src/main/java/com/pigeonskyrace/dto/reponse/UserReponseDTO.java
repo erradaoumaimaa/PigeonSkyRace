@@ -12,8 +12,18 @@ public class UserReponseDTO {
     private Role role;
     private List<ObjectId> colombiers;
 
-    public ObjectId getId() {
+    public UserReponseDTO() {
+    }
 
+    public UserReponseDTO(ObjectId id, String name, String email, Role role) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.role = role;
+    }
+
+    // Getters et Setters
+    public ObjectId getId() {
         return id;
     }
 
@@ -50,14 +60,6 @@ public class UserReponseDTO {
     }
 
     public void setColombiers(List<ObjectId> colombiers) {
-        this.colombiers = colombiers;
-    }
-
-    public UserReponseDTO(ObjectId id, String name, String email, Role role, List<ObjectId> colombiers) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.role = role;
         this.colombiers = colombiers;
     }
 }
