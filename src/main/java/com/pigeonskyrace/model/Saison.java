@@ -31,5 +31,4 @@ public class Saison {
     @Size(max = 255, message = "La description ne doit pas dépasser 255 caractères")
     private String description;
 
-
 }
