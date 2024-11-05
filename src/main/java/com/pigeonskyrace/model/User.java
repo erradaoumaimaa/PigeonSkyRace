@@ -8,10 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.MongoId;
 import org.bson.types.ObjectId;
 
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class User {
-    @MongoId
+    @Id
     private ObjectId id;
 
     @Indexed(unique = true)
@@ -41,7 +41,4 @@ public class User {
 
     private Role role;
 
-    // Liste des colombiers associés à cet utilisateur
-    @DBRef
-    private List<Colombier> colombiers;
 }

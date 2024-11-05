@@ -1,7 +1,6 @@
 package com.pigeonskyrace.controller;
 
 import com.pigeonskyrace.dto.reponse.ColombierReponseDTO;
-import com.pigeonskyrace.dto.reponse.UserReponseDTO;
 import com.pigeonskyrace.mapper.ColombierMapper;
 import com.pigeonskyrace.model.Colombier;
 import com.pigeonskyrace.service.ColombierService;

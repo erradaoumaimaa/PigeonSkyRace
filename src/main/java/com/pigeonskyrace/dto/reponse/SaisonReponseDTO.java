@@ -12,5 +12,5 @@ public class SaisonReponseDTO {
     private Date date;
     private String nom;
     private String description;
-    private List<CompetionReponseDTO> competions;
+    private String competions;
 }

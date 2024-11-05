@@ -1,7 +1,6 @@
 package com.pigeonskyrace.mapper;
 
 import com.pigeonskyrace.dto.reponse.ColombierReponseDTO;
-import com.pigeonskyrace.dto.reponse.UserReponseDTO;
 import com.pigeonskyrace.model.Colombier;
 import org.bson.types.ObjectId;
 import org.mapstruct.Mapper;
