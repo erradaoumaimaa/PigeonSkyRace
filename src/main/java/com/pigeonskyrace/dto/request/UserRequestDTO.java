@@ -44,6 +44,7 @@ public class UserRequestDTO {
         this.email = email;
     }
 
+
     public Role getRole() {
         return role;
     }

@@ -1,7 +1,9 @@
 package com.pigeonskyrace;
 
 import com.pigeonskyrace.model.Colombier;
+import com.pigeonskyrace.model.Pigeon;
 import com.pigeonskyrace.repository.ColombierRepository;
+import com.pigeonskyrace.repository.PigeonRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,22 +16,23 @@ import java.util.Scanner;
 @SpringBootApplication
 public class PigeonSkyRaceApplication {
 
-	//public static void main(String[] args) {
-	//	SpringApplication.run(PigeonSkyRaceApplication.class, args);
-	//}
+	public static void main(String[] args) {
+	//
+			SpringApplication.run(PigeonSkyRaceApplication.class, args);
+	}
 
 //	@Bean
-	//CommandLineRunner runner(PigeonRepository pigeonRepository) {
-	//return args -> {
+//	CommandLineRunner runner(PigeonRepository pigeonRepository) {
+//	return args -> {
 //			System.out.println("Tentative d'insertion du pigeon...");
 //			Pigeon pigeon = new Pigeon("B12345", "Femelle", 2, "Gris");
 //			pigeonRepository.insert(pigeon);
 //			System.out.println("Pigeon ajouté à la base de données : " + pigeon);
+//
+//		};
+//
 
-	//	};
 
-
-//	}
 
 
 	@Bean
@@ -78,55 +81,55 @@ public class PigeonSkyRaceApplication {
 //}
 		//   return 0;
 		// }
-
-	public static boolean isPalindrome(int number) {
-		int Onumber = number;
-		int reversenumber=0;
-		while(number >0) {
-			int digi = number % 10;
-
-			reversenumber = reversenumber * 10 + digi;
-			number = number / 10;
-
-
-		}
-
-		return reversenumber==Onumber;
-
-	}
-
-	public String makeFancyString(String s) {
-		String result = "";
-		int count = 0;
-
-		for (int i = 0; i < s.length(); i++) {
-			if (i > 0 && s.charAt(i) == s.charAt(i - 1)) {
-				count++;
-			} else {
-				count = 1;
-			}
-
-
-			if (count < 3) {
-				result += s.charAt(i);
-			}
-		}
-
-		return result;
-	}
-
-
-	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		System.out.print("Entrez un nombre : ");
-		int number = scanner.nextInt();
-
-		if (isPalindrome(number)) {
-			System.out.println(number + " est un palindrome.");
-		} else {
-			System.out.println(number + " n'est pas un palindrome.");
-		}
-	}
+//
+//	public static boolean isPalindrome(int number) {
+//		int Onumber = number;
+//		int reversenumber=0;
+//		while(number >0) {
+//			int digi = number % 10;
+//
+//			reversenumber = reversenumber * 10 + digi;
+//			number = number / 10;
+//
+//
+//		}
+//
+//		return reversenumber==Onumber;
+//
+//	}
+//
+//	public String makeFancyString(String s) {
+//		String result = "";
+//		int count = 0;
+//
+//		for (int i = 0; i < s.length(); i++) {
+//			if (i > 0 && s.charAt(i) == s.charAt(i - 1)) {
+//				count++;
+//			} else {
+//				count = 1;
+//			}
+//
+//
+//			if (count < 3) {
+//				result += s.charAt(i);
+//			}
+//		}
+//
+//		return result;
+//	}
+//
+//
+//	public static void main(String[] args) {
+//		Scanner scanner = new Scanner(System.in);
+//		System.out.print("Entrez un nombre : ");
+//		int number = scanner.nextInt();
+//
+//		if (isPalindrome(number)) {
+//			System.out.println(number + " est un palindrome.");
+//		} else {
+//			System.out.println(number + " n'est pas un palindrome.");
+//		}
+//	}
 
 
 
