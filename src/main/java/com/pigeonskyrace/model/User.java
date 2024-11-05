@@ -41,6 +41,4 @@ public class User {
 
     private Role role;
 
-    @DBRef
-    private List<Colombier> colombiers;
 }

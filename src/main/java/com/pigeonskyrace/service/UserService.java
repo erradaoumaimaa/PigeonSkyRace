@@ -1,38 +1,60 @@
 package com.pigeonskyrace.service;
 
-import com.pigeonskyrace.dto.request.UserRequestDTO;
-import com.pigeonskyrace.model.User;
-import com.pigeonskyrace.model.enums.Role;
-import com.pigeonskyrace.repository.UserRepository;
+import com.pigeonskyrace.dto.reponse.UserResponseDTO;
+import com.pigeonskyrace.dto.request.LoginRequestDTO;
+import com.pigeonskyrace.dto.request.RegisterRequestDTO;
 import com.pigeonskyrace.mapper.UserMapper;
-import org.bson.types.ObjectId;
+import com.pigeonskyrace.model.User;
+import com.pigeonskyrace.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 
 @Service
 public class UserService {
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserMapper userMapper;
-
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserService() {
-        this.passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    public UserService(UserRepository userRepository, UserMapper userMapper, BCryptPasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public User registerUser(UserRequestDTO userRequest) {
-        User user = userMapper.toUser(userRequest);
-        user.setId(ObjectId.get());
-        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-        user.setRole(Role.ELEVEUR);
+    public String register(RegisterRequestDTO request) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Email is already in use");
+        }
 
-        return userRepository.save(user);
+        // Mapper RegisterRequest en User
+        User user = userMapper.toEntity(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword())); // Hachage du mot de passe
+        userRepository.save(user);
+        return "User registered successfully!";
+    }
+
+    public String login(LoginRequestDTO request) {
+        Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+                return "Login successful!";
+            } else {
+                throw new IllegalArgumentException("Incorrect password");
+            }
+        } else {
+            throw new IllegalArgumentException("User not found");
+        }
+    }
+
+    public UserResponseDTO getUserById(String id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        return userMapper.toResponse(user);
     }
 }
-
