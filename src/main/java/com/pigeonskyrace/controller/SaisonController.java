@@ -5,6 +5,7 @@ import com.pigeonskyrace.dto.reponse.SaisonReponseDTO;
 import com.pigeonskyrace.dto.request.SaisonRequestDTO;
 import com.pigeonskyrace.mapper.SaisonMapper;
 import com.pigeonskyrace.model.Saison;
+import com.pigeonskyrace.service.CompetionService;
 import com.pigeonskyrace.service.SaisonService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,22 @@ public class SaisonController {
 
     @Autowired
     private SaisonMapper saisonMapper;
+    @Autowired
+    private CompetionService competionService;
 
 
-
-
-
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<SaisonReponseDTO> createSaison(@RequestBody @Valid SaisonRequestDTO saisonRequestDTO) {
+
         Saison saison = saisonMapper.toEntity(saisonRequestDTO);
+
+        System.out.println("Mapped Saison: " + saison);
+
         Saison savedSaison = saisonService.save(saison);
-        return ResponseEntity.ok(saisonMapper.toDto(savedSaison));
+
+        SaisonReponseDTO responseDTO = saisonMapper.toDto(savedSaison);
+
+        return ResponseEntity.ok(responseDTO);
     }
 
     @GetMapping
