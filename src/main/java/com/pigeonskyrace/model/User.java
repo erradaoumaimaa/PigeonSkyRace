@@ -41,4 +41,8 @@ public class User {
 
     private Role role;
 
+    // Liste des colombiers associés à cet utilisateur
+    @DBRef
+    private List<Colombier> colombiers;
+
 }

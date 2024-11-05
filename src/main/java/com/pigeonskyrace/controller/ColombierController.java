@@ -1,6 +1,7 @@
 package com.pigeonskyrace.controller;
 
 import com.pigeonskyrace.dto.reponse.ColombierReponseDTO;
+import com.pigeonskyrace.dto.reponse.UserResponseDTO;
 import com.pigeonskyrace.mapper.ColombierMapper;
 import com.pigeonskyrace.model.Colombier;
 import com.pigeonskyrace.service.ColombierService;
@@ -22,7 +23,7 @@ public class ColombierController {
     private ColombierMapper colombierMapper;
 
     @PostMapping
-    public ResponseEntity<ColombierReponseDTO> createColombier(@RequestBody UserReponseDTO.ColombierRequestDTO colombierRequestDTO) {
+    public ResponseEntity<ColombierReponseDTO> createColombier(@RequestBody UserResponseDTO.ColombierRequestDTO colombierRequestDTO) {
         Colombier colombier = colombierMapper.toColombier(colombierRequestDTO);
         Colombier savedColombier = colombierService.save(colombier);
         return ResponseEntity.ok(colombierMapper.toColombierResponseDTO(savedColombier));
