@@ -6,6 +6,7 @@ import com.pigeonskyrace.dto.request.RegisterRequestDTO;
 import com.pigeonskyrace.mapper.UserMapper;
 import com.pigeonskyrace.model.User;
 import com.pigeonskyrace.repository.UserRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -57,4 +58,12 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         return userMapper.toResponse(user);
     }
+
+
+    public ObjectId findUserIdByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(User::getId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with email: " + email));
+    }
+
 }
