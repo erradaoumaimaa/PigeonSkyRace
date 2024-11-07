@@ -29,7 +29,7 @@ public class SaisonController {
     private CompetionService competionService;
 
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<SaisonReponseDTO> createSaison(@RequestBody @Valid SaisonRequestDTO saisonRequestDTO) {
 
         Saison saison = saisonMapper.toEntity(saisonRequestDTO);
