@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
@@ -26,6 +27,7 @@ public class Saison {
     @NotNull(message = "La date est requise")
     private Date date;
 
+    @Indexed(unique = true)
     @NotBlank(message = "Le nom est requis")
     @Size(max = 100, message = "Le nom ne doit pas dépasser 100 caractères")
     private String nom;

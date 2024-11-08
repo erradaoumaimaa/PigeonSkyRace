@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ColombierMapper {
-
+    Colombier toColombier(UserResponseDTO.ColombierRequestDTO colombierRequestDTO);
+  // @Mapping(target = "proprietaireId", source = "proprietaire.id")
+    ColombierReponseDTO toColombierResponseDTO(Colombier colombier);
     public Colombier toColombier(UserResponseDTO.ColombierRequestDTO colombierRequestDTO, ObjectId proprietaireId) {
         if (colombierRequestDTO == null) {
             return null;
