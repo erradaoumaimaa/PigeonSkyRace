@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SaisonService {
@@ -18,5 +19,9 @@ public class SaisonService {
 
     public List<Saison> findAll() {
         return saisonRepository.findAll();
+    }
+
+    public Optional<Saison> findByNom(String nom) {
+        return saisonRepository.findTopByNom(nom);
     }
 }

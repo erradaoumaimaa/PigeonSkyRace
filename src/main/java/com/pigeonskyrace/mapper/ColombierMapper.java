@@ -11,7 +11,7 @@ import org.mapstruct.Mapping;
 public interface ColombierMapper {
 
     Colombier toColombier(UserResponseDTO.ColombierRequestDTO colombierRequestDTO);
-   @Mapping(target = "proprietaireId", source = "proprietaire.id")
+  // @Mapping(target = "proprietaireId", source = "proprietaire.id")
     ColombierReponseDTO toColombierResponseDTO(Colombier colombier);
 
 
