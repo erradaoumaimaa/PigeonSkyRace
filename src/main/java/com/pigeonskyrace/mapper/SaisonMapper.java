@@ -9,13 +9,33 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-@Mapper(componentModel = "spring")
-public interface SaisonMapper {
-    @Mapping(target = "id", source = "id", qualifiedByName = "objectIdToString")
-    @Mapping(target = "competions", ignore = true)
-    SaisonReponseDTO toDto(Saison saison);
+import org.bson.types.ObjectId;
+import org.springframework.stereotype.Component;
 
-    default Saison toEntity(SaisonRequestDTO saisonRequestDTO) {
+import java.util.ArrayList;
+import java.util.List;
+
+@Component
+public class SaisonMapper {
+
+    public SaisonReponseDTO toDto(Saison saison) {
+        if (saison == null) {
+            return null;
+        }
+
+        SaisonReponseDTO dto = new SaisonReponseDTO();
+        dto.setId(objectIdToString(saison.getId()));
+        dto.setDate(saison.getDate());
+        dto.setNom(saison.getNom());
+        dto.setDescription(saison.getDescription());
+
+        dto.setCompetions(null);
+
+        return dto;
+    }
+
+
+    public Saison toEntity(SaisonRequestDTO saisonRequestDTO) {
         if (saisonRequestDTO == null) {
             return null;
         }
@@ -24,19 +44,19 @@ public interface SaisonMapper {
         saison.setDate(saisonRequestDTO.getDate());
         saison.setNom(saisonRequestDTO.getNom());
         saison.setDescription(saisonRequestDTO.getDescription());
-        System.out.println("Mapped Saison: " + saison);
+
+        saison.setCompetions(new ArrayList<>());
 
         return saison;
     }
 
     // Méthode de mappage personnalisée pour convertir ObjectId en String
-    @Named("objectIdToString")
-    default String map(ObjectId value) {
-        return value != null ? value.toHexString() : null; // Convertit l'ObjectId en String
+    private String objectIdToString(ObjectId objectId) {
+        return objectId != null ? objectId.toHexString() : null;
     }
 
     // Méthode de mappage personnalisée pour convertir String en ObjectId
-    default ObjectId map(String value) {
-        return value != null ? new ObjectId(value) : null; // Convertit le String en ObjectId
+    private ObjectId stringToObjectId(String string) {
+        return string != null ? new ObjectId(string) : null;
     }
 }

@@ -3,10 +3,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -14,14 +10,11 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.time.LocalDateTime;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Document(collection = "competions")
 public class Competion {
 
     @MongoId
-    private ObjectId id;
+    private String id;
 
     @NotBlank(message = "Le nom est requis")
     @Size(max = 100, message = "Le nom ne doit pas dépasser 100 caractères")
@@ -47,5 +40,84 @@ public class Competion {
     @DBRef
     private Saison saison;
 
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getCoordonnGPS() {
+        return coordonnGPS;
+    }
+
+    public void setCoordonnGPS(String coordonnGPS) {
+        this.coordonnGPS = coordonnGPS;
+    }
+
+    public int getNbPigeons() {
+        return nbPigeons;
+    }
+
+    public void setNbPigeons(int nbPigeons) {
+        this.nbPigeons = nbPigeons;
+    }
+
+    public double getPourcentageAdmission() {
+        return pourcentageAdmission;
+    }
+
+    public void setPourcentageAdmission(double pourcentageAdmission) {
+        this.pourcentageAdmission = pourcentageAdmission;
+    }
+
+    public Saison getSaison() {
+        return saison;
+    }
+
+    public void setSaison(Saison saison) {
+        this.saison = saison;
+    }
+
+    public Competion() {
+
+
+    }
+
+
+    public Competion(String id, String nom, LocalDateTime startDate, LocalDateTime endDate, String coordonnGPS, int nbPigeons, double pourcentageAdmission, Saison saison) {
+        this.id = id;
+        this.nom = nom;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.coordonnGPS = coordonnGPS;
+        this.nbPigeons = nbPigeons;
+        this.pourcentageAdmission = pourcentageAdmission;
+        this.saison = saison;
+    }
 }

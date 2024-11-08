@@ -9,6 +9,7 @@ public class CompetionReponseDTO {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private String coordonnGPS;
+    private String saisonNom;
     private int nbPigeons;
     private double pourcentageAdmission = 25.0;
 }
