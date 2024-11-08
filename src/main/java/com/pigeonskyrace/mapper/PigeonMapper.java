@@ -7,6 +7,7 @@ import com.pigeonskyrace.model.Pigeon;
 import com.pigeonskyrace.service.ColombierService;
 import org.bson.types.ObjectId;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
