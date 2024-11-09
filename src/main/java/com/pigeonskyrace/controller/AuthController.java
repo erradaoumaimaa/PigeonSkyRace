@@ -6,6 +6,7 @@ import com.pigeonskyrace.dto.request.RegisterRequestDTO;
 import com.pigeonskyrace.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,12 +38,19 @@ public class AuthController {
     public ResponseEntity<String> login(@RequestBody LoginRequestDTO loginRequest, HttpSession session) {
         try {
             String responseMessage = userService.login(loginRequest);
-            session.setAttribute("user", loginRequest.getEmail()); // Stocke l'utilisateur dans la session
+
+            // Récupérez l'ID de l'utilisateur connecté et stockez-le dans la session
+            ObjectId userId = userService.findUserIdByEmail(loginRequest.getEmail());
+            session.setAttribute("userId", userId);
+
             return ResponseEntity.ok(responseMessage);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
+
+
+
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpSession session) {

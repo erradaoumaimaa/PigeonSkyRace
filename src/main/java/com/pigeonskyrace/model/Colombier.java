@@ -38,4 +38,11 @@ public class Colombier {
     // Liste des pigeons associés à ce colombier
     @DBRef
     private List<Pigeon> pigeons;
+
+    public void setProprietaireId(ObjectId userId) {
+        User user = new User();
+        user.setId(userId);
+        this.proprietaire = user;
+    }
+
 }

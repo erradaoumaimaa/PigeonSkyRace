@@ -30,6 +30,8 @@ public class CompetionRequestDTO {
     @Min(value = 1, message = "Le nombre de pigeons doit être au moins de 1")
     private int nbPigeons;
 
+    private String saisonNom;
+    private double pourcentageAdmission = 25.0;
     private double pourcentageAdmission = 25.0;
 
     private String saisonId;
