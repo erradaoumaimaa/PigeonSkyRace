@@ -62,7 +62,7 @@ public class CompetionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    // Endpoint pour obtenir toutes les compétitions
+
     @GetMapping("/competions")
     public ResponseEntity<List<CompetionReponseDTO>> getAllCompetions() {
         List<Competion> competions = competionService.findAll();
