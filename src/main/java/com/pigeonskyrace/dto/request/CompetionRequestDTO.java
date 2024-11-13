@@ -32,7 +32,6 @@ public class CompetionRequestDTO {
 
     private String saisonNom;
     private double pourcentageAdmission = 25.0;
-    private double pourcentageAdmission = 25.0;
 
     private String saisonId;
 
