@@ -9,5 +9,4 @@ public class PigeonSaisonCompetitionRequestDTO {
     @NotBlank(message = "saisonPigeonId is required")
     private String saisonPigeonId;
 
-    private String competitionId;
 }
