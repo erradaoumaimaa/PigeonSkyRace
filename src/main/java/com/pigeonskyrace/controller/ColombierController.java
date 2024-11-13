@@ -49,5 +49,6 @@ public class ColombierController {
                 .map(colombierMapper::toColombierResponseDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(colombierResponseDTOs);
+
     }
 }
