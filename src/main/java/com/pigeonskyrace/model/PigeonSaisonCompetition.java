@@ -10,12 +10,13 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "saisonPigeons")
-public class SaisonPigeon {
+@Document(collection = "pigeonSaisonCompetitions")
+public class PigeonSaisonCompetition {
 
     @MongoId
     private ObjectId id;
-    private ObjectId saisonId;
-    private ObjectId pigeonId;
 
+    private ObjectId saisonPigeonId;
+
+    private ObjectId competitionId;
 }
