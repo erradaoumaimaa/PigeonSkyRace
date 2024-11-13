@@ -21,7 +21,7 @@ public class PigeonSeasonCompetitionController {
             @PathVariable String competitionId,
             @Valid @RequestBody PigeonSaisonCompetitionRequestDTO requestDTO) {
 
-
+        requestDTO.setCompetitionId(competitionId);
 
         PigeonSaisonCompetitionResponseDTO responseDTO = service.registerPigeonInCompetition(requestDTO);
         return ResponseEntity.ok(responseDTO);
