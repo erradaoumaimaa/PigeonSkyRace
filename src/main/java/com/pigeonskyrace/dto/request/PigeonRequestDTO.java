@@ -6,11 +6,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class PigeonRequestDTO {
-    @NotBlank(message = "Le numéro de bague est requis")
-    @Size(max = 50)
-    private String numeroBague;
 
     @NotNull(message = "Le sexe est requis")
     private Sexe sexe;
@@ -23,4 +22,7 @@ public class PigeonRequestDTO {
     private String couleur;
 
     private String colombier;
+
+    @NotNull(message = "La date de naissance est requise")
+    private LocalDate dateNaissance;
 }

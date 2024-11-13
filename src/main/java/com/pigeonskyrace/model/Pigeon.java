@@ -12,9 +12,12 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Random;
+
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Document(collection = "pigeons")
 public class Pigeon {
 
@@ -37,8 +40,26 @@ public class Pigeon {
     @Size(max = 50)
     private String couleur;
 
+    private LocalDate dateNaissance;
 
     // Référence au colombier auquel ce pigeon appartient
     @DBRef
     private Colombier colombier;
+
+    public Pigeon(Sexe sexe, Integer age, String couleur, LocalDate dateNaissance, Colombier colombier) {
+        this.sexe = sexe;
+        this.age = age;
+        this.couleur = couleur;
+        this.dateNaissance = dateNaissance;
+        this.colombier = colombier;
+        this.numeroBague = generateNumeroBague(sexe, dateNaissance);
+    }
+
+    private String generateNumeroBague(Sexe sexe, LocalDate dateNaissance) {
+        String prefix = (sexe == Sexe.FEMALE) ? "F" : "M";
+        Random rand = new Random();
+        int n = rand.nextInt(900) + 100;
+        String yearSuffix = dateNaissance.format(DateTimeFormatter.ofPattern("yy"));
+        return prefix + "***" + n + "-" + yearSuffix;
+    }
 }
