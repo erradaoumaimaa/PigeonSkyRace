@@ -18,6 +18,5 @@ public class PigeonSaisonCompetition {
 
     private ObjectId saisonPigeonId;
 
-    private ObjectId competitionId;
 
 }
