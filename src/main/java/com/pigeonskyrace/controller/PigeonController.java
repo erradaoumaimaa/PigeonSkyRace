@@ -28,13 +28,12 @@ public class PigeonController {
 
     @PostMapping
     public ResponseEntity<PigeonResponseDTO> createPigeon(@RequestBody PigeonRequestDTO pigeonRequestDTO) {
-        System.out.println("Received PigeonRequestDTO: " + pigeonRequestDTO);
 
         Colombier colombier = colombierService.findByNomColombier(pigeonRequestDTO.getColombier())
                 .orElseThrow(() -> new RuntimeException("Colombier non trouvé : " + pigeonRequestDTO.getColombier()));
 
         Pigeon pigeon = pigeonMapper.toPigeon(pigeonRequestDTO);
-        pigeon.setColombier(colombier); // Associer le pigeon au colombier
+        pigeon.setColombier(colombier);
 
         Pigeon savedPigeon = pigeonService.save(pigeon);
 
