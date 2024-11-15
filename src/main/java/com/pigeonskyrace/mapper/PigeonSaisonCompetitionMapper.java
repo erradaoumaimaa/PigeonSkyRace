@@ -4,24 +4,37 @@ import com.pigeonskyrace.dto.request.PigeonSaisonCompetitionRequestDTO;
 import com.pigeonskyrace.dto.reponse.PigeonSaisonCompetitionResponseDTO;
 import com.pigeonskyrace.model.PigeonSaisonCompetition;
 import org.bson.types.ObjectId;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
+import org.mapstruct.Named;
 
-@Component
-public class PigeonSaisonCompetitionMapper {
+@Mapper(componentModel = "spring")
+public interface PigeonSaisonCompetitionMapper {
 
-    public PigeonSaisonCompetition toEntity(PigeonSaisonCompetitionRequestDTO requestDTO) {
-        return new PigeonSaisonCompetition(
-                new ObjectId(),
-                new ObjectId(requestDTO.getSaisonPigeonId()),
-                new ObjectId(requestDTO.getCompetitionId())
-        );
+    @Mappings({
+            @Mapping(source = "saisonPigeonId", target = "saisonPigeonId", qualifiedByName = "stringToObjectId"),
+            @Mapping(source = "competitionId", target = "competitionId", qualifiedByName = "stringToObjectId"),
+            @Mapping(target = "id", ignore = true)
+    })
+    PigeonSaisonCompetition toEntity(PigeonSaisonCompetitionRequestDTO requestDTO);
+
+    @Mappings({
+            @Mapping(source = "id", target = "id", qualifiedByName = "objectIdToString"),
+            @Mapping(source = "saisonPigeonId", target = "saisonPigeonId", qualifiedByName = "objectIdToString"),
+            @Mapping(source = "competitionId", target = "competitionId", qualifiedByName = "objectIdToString")
+    })
+    PigeonSaisonCompetitionResponseDTO toResponseDTO(PigeonSaisonCompetition entity);
+
+    // Méthode pour convertir un ObjectId en String
+    @Named("objectIdToString")  // Ajoutez l'annotation @Named
+    default String objectIdToString(ObjectId objectId) {
+        return objectId != null ? objectId.toHexString() : null;
     }
 
-    public PigeonSaisonCompetitionResponseDTO toResponseDTO(PigeonSaisonCompetition entity) {
-        return new PigeonSaisonCompetitionResponseDTO(
-                entity.getId().toHexString(),
-                entity.getSaisonPigeonId().toHexString(),
-                entity.getCompetitionId().toHexString()
-        );
+    // Méthode pour convertir une String en ObjectId
+    @Named("stringToObjectId")  // Ajoutez l'annotation @Named
+    default ObjectId stringToObjectId(String id) {
+        return id != null && !id.isEmpty() ? new ObjectId(id) : null;
     }
 }

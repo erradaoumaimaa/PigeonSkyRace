@@ -32,8 +32,12 @@ public class SaisonPigeonService {
     }
 
     public SaisonPigeon getSaisonPigeonBySaisonIdAndPigeonId(ObjectId saisonId, ObjectId pigeonId) {
-        return saisonPigeonRepository.findSaisonPigeonBySaisonIdAndPigeonId(saisonId,pigeonId).orElseThrow(()->new RuntimeException("SaisonPigeon not found"));
-
+        return saisonPigeonRepository.findSaisonPigeonBySaisonIdAndPigeonId(saisonId, pigeonId)
+                .orElseThrow(() -> new RuntimeException("SaisonPigeon not found"));
     }
+
+
+
+
 
 }

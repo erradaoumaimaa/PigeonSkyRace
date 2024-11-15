@@ -28,8 +28,11 @@ public class Colombier {
     @Size(max = 50, message = "Le nom du colombier ne doit pas dépasser 50 caractères")
     private String nomColombier;
 
-    @Size(max = 100, message = "Les coordonnées GPS ne doivent pas dépasser 100 caractères")
-    private String coordonneeGPS;
+    @Size(max=90 ,min=-90)
+    private double coordonneeGPSlatitude;
+
+    @Size(max=180 ,min=-180)
+    private double coordonneeGPSlongitude;
 
     // Référence vers l'utilisateur qui possède ce colombier
     @DBRef

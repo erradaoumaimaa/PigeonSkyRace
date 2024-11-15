@@ -15,21 +15,22 @@ public class CompetionRequestDTO {
     @Indexed(unique = true)
     private String nom;
 
-    @NotNull(message = "La date de début est requise")
-    private LocalDateTime startDate;
 
-    @NotNull(message = "La date de fin est requise")
-    private LocalDateTime endDate;
+    @NotNull(message = "Les coordonnées GPS sont requises")
+    private double latitudeGPS;
 
-    @NotBlank(message = "Les coordonnées GPS sont requises")
-    @Size(max = 100, message = "Les coordonnées GPS ne doivent pas dépasser 100 caractères")
-    private String coordonnGPS;
+    @NotNull(message = "Les coordonnées GPS sont requises")
+    private double longitudeGPS;
 
     @Min(value = 1, message = "Le nombre de pigeons doit être au moins de 1")
     private int nbPigeons;
 
     private String saisonNom;
     private double pourcentageAdmission = 25.0;
-    private LocalDateTime dateDébut;
-    private LocalDateTime dateFin;
+    @NotNull(message = "La date de fin est requise")
+
+    private LocalDateTime startTime;
+    @NotNull(message = "La date de fin est requise")
+
+    private LocalDateTime endTime;
 }

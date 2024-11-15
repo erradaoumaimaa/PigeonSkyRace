@@ -1,4 +1,6 @@
 package com.pigeonskyrace.dto.reponse;
+import com.pigeonskyrace.model.Resultat;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import java.time.LocalDateTime;
 
@@ -6,12 +8,13 @@ import java.time.LocalDateTime;
 public class CompetionReponseDTO {
     private String id;
     private String nom;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private String coordonnGPS;
+    private double latitudeGPS;
+    private double longitudeGPS;
     private String saisonNom;
     private int nbPigeons;
     private double pourcentageAdmission = 25.0;
-    private LocalDateTime dateDébut;
-    private LocalDateTime dateFin;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+
+
 }

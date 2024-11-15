@@ -23,14 +23,15 @@ import java.util.stream.Collectors;
 public class CompetionController {
 
 
-    private final CompetionMapper competionMapper = new CompetionMapper();
+    private final CompetionMapper competionMapper;
     private final CompetionService competionService;
 
     @Autowired
     private SaisonService  saisonService;
 
     @Autowired
-    public CompetionController(CompetionService competionService) {
+    public CompetionController(CompetionMapper competionMapper, CompetionService competionService) {
+        this.competionMapper = competionMapper;
         this.competionService = competionService;
     }
     // Endpoint pour créer une compétition

@@ -8,6 +8,7 @@ import org.bson.types.ObjectId;
 public class ColombierReponseDTO {
     private ObjectId id;
     private String nomColombier;
-    private String coordonneeGPS;
+    private double coordonneeGPSlatitude;
+    private double coordonneeGPSlongitude;
     private String proprietaireId;
 }

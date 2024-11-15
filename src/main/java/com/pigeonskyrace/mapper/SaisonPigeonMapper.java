@@ -3,6 +3,7 @@ import com.pigeonskyrace.dto.reponse.SaisonPigeonResponseDTO;
 import com.pigeonskyrace.dto.request.SaisonPigeonRequestDTO;
 import com.pigeonskyrace.model.SaisonPigeon;
 import org.bson.types.ObjectId;
+import org.mapstruct.Named;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -33,7 +33,7 @@ public class PigeonSaisonCompetitionService {
         return mapper.toResponseDTO(savedEntity);
     }
 
-    public PigeonSaisonCompetition findBySeasonPigeonAndCompetition(ObjectId competitionId, ObjectId saisonPigeonId) throws ChangeSetPersister.NotFoundException {
+    public PigeonSaisonCompetition findBySeasonPigeonAndCompetition(String competitionId, ObjectId saisonPigeonId) throws ChangeSetPersister.NotFoundException {
         return  repository.findPigeonSaisonCompetitionByCompetitionIdAndSaisonPigeonId(competitionId,saisonPigeonId).orElseThrow( () ->
                 new ChangeSetPersister.NotFoundException()
         );

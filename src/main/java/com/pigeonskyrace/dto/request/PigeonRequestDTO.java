@@ -9,6 +9,8 @@ import java.time.LocalDate;
 
 public class PigeonRequestDTO {
 
+    private String numeroBague;
+
     @NotBlank(message = "Le sexe est requis")
     private Sexe sexe;
 
@@ -55,5 +57,11 @@ public class PigeonRequestDTO {
         this.colombierId = colombierId;
     }
 
+    public String getNumeroBague() {
+        return numeroBague;
+    }
 
+    public void setNumeroBague(String numeroBague) {
+        this.numeroBague = numeroBague;
+    }
 }

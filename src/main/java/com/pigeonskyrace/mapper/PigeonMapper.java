@@ -16,7 +16,8 @@ public interface PigeonMapper {
 
     PigeonMapper INSTANCE = Mappers.getMapper(PigeonMapper.class);
 
-    @Mapping(target = "colombier.id", source = "colombierId")
+
+    @Mapping(source = "numeroBague", target = "numeroBague")
     Pigeon toPigeon(PigeonRequestDTO pigeonRequestDTO);
 
     PigeonResponseDTO toPigeonResponseDTO(Pigeon pigeon);
