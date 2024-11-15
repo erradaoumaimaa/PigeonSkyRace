@@ -36,7 +36,7 @@ public class Colombier {
 
     // Référence vers l'utilisateur qui possède ce colombier
     @DBRef
-    private User proprietaire;
+    private User user;
 
     // Liste des pigeons associés à ce colombier
     @DBRef
@@ -45,7 +45,7 @@ public class Colombier {
     public void setProprietaireId(ObjectId userId) {
         User user = new User();
         user.setId(userId);
-        this.proprietaire = user;
+        this.user = user;
     }
 
 }

@@ -10,5 +10,5 @@ public class ColombierReponseDTO {
     private String nomColombier;
     private double coordonneeGPSlatitude;
     private double coordonneeGPSlongitude;
-    private String proprietaireId;
+    private String userId;
 }
