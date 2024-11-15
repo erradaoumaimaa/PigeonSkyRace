@@ -7,6 +7,7 @@ import com.pigeonskyrace.model.Colombier;
 import com.pigeonskyrace.model.Pigeon;
 import com.pigeonskyrace.service.ColombierService;
 import com.pigeonskyrace.service.PigeonService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,17 +15,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/pigeons")
+@RequestMapping("/api/v1/pigeons")
+@RequiredArgsConstructor
 public class PigeonController {
     private final PigeonService pigeonService;
     private final ColombierService colombierService;
     private final PigeonMapper pigeonMapper;
 
-    public PigeonController(PigeonService pigeonService, ColombierService colombierService, PigeonMapper pigeonMapper) {
-        this.pigeonService = pigeonService;
-        this.colombierService = colombierService;
-        this.pigeonMapper = pigeonMapper;
-    }
 
     @PostMapping
     public ResponseEntity<PigeonResponseDTO> createPigeon(@RequestBody PigeonRequestDTO pigeonRequestDTO) {

@@ -5,6 +5,7 @@ import com.pigeonskyrace.mapper.ColombierMapper;
 import com.pigeonskyrace.model.Colombier;
 import com.pigeonskyrace.service.ColombierService;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/colombiers")
+@RequestMapping("/api/v1/colombiers")
+@RequiredArgsConstructor
 public class ColombierController {
 
     @Autowired

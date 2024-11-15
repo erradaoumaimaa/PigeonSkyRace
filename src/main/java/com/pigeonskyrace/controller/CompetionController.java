@@ -10,6 +10,7 @@ import com.pigeonskyrace.service.CompetionService;
 import com.pigeonskyrace.service.SaisonService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,30 +20,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/competion")
+@RequestMapping("api/v1/competion")
+@RequiredArgsConstructor
 public class CompetionController {
 
-
+    @Autowired
     private final CompetionMapper competionMapper;
     private final CompetionService competionService;
+    private  final SaisonService  saisonService;
 
-    @Autowired
-    private SaisonService  saisonService;
-
-    @Autowired
-    public CompetionController(CompetionMapper competionMapper, CompetionService competionService) {
-        this.competionMapper = competionMapper;
-        this.competionService = competionService;
-    }
-    // Endpoint pour créer une compétition
-    @PostMapping("/competion")
+    @PostMapping()
     public ResponseEntity<CompetionReponseDTO> createCompetion(@RequestBody CompetionRequestDTO competionRequestDTO) {
-        // Convert CompetionRequestDTO to Competion entity
+        // Convertir CompetionRequestDTO en entité Competion
         Competion competion = competionMapper.toEntity(competionRequestDTO);
 
-        // Rechercher la saison par son nom
-        Saison saison = saisonService.findByNom(competionRequestDTO.getSaisonNom())
-                .orElseThrow(() -> new RuntimeException("Saison non trouvée avec le nom : " + competionRequestDTO.getSaisonNom()));
+        // Rechercher la saison par son ID
+        Saison saison = saisonService.findById(competionRequestDTO.getSaisonId())
+                .orElseThrow(() -> new RuntimeException("Saison non trouvée avec l'ID : " + competionRequestDTO.getSaisonId()));
 
         // Associer la compétition à la saison
         competion.setSaison(saison);
@@ -56,10 +50,10 @@ public class CompetionController {
         // Sauvegarder la saison avec la compétition ajoutée
         saisonService.save(saison);
 
-        // Convert the saved Competion entity to CompetionReponseDTO
+        // Convertir l'entité compétitions sauvegardée en DTO
         CompetionReponseDTO responseDto = competionMapper.toDto(savedCompetion);
 
-        // Return the created Competion with a 201 Created status
+        // Retourner la compétition créée avec un statut 201 Created
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 

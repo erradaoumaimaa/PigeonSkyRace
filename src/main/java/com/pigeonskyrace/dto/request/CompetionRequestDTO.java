@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
 
 import java.time.LocalDateTime;
@@ -25,7 +26,7 @@ public class CompetionRequestDTO {
     @Min(value = 1, message = "Le nombre de pigeons doit être au moins de 1")
     private int nbPigeons;
 
-    private String saisonNom;
+    private String saisonId;
     private double pourcentageAdmission = 25.0;
     @NotNull(message = "La date de fin est requise")
 

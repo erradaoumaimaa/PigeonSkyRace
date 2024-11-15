@@ -32,7 +32,7 @@ public class ResultatService {
 
         // Utiliser la méthode utilitaire pour convertir le String en ObjectId
         SaisonPigeon saisonPigeon = saisonPigeonService.getSaisonPigeonBySaisonIdAndPigeonId(
-                ObjectIdUtil.stringToObjectId(competition.getSaisonNom()), pigeon.id());
+                ObjectIdUtil.stringToObjectId(competition.getSaisonId()), pigeon.id());
 
         PigeonSaisonCompetition pigeonSaisonCompetition = pigeonSaisonCompetitionService
                 .findBySeasonPigeonAndCompetition(competition.getId(), saisonPigeon.getId());

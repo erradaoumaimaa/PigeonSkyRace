@@ -22,7 +22,7 @@ public interface CompetionMapper {
             @Mapping(source = "longitudeGPS", target = "longitudeGPS"),
             @Mapping(source = "nombrePigeons", target = "nbPigeons"),
             @Mapping(source = "pourcentageAdmission", target = "pourcentageAdmission"),
-            @Mapping(source = "saison.nom", target = "saisonNom")
+            @Mapping(source = "saison.id", target = "saisonId", qualifiedByName = "objectIdToString")
     })
     CompetionReponseDTO toDto(Competion competition);
 
@@ -36,6 +36,7 @@ public interface CompetionMapper {
             @Mapping(target = "saison", ignore = true)
     })
     Competion toEntity(CompetionRequestDTO competitionRequestDTO);
+
 
 
     // Map ObjectId to String
