@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 @Mapper(componentModel = "spring")
-public abstract class PigeonMapper {
+public abstract class  PigeonMapper {
 
     @Autowired
     private ColombierService colombierService;
