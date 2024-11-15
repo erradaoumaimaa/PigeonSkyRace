@@ -33,7 +33,6 @@ public class ColombierController {
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-
         // Utilisez le mapper pour créer le Colombier avec l'ID du propriétaire
         Colombier colombier = colombierMapper.toColombier(colombierRequestDTO, userId);
 

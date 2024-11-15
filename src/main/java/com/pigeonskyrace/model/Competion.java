@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.time.LocalDateTime;
@@ -35,6 +36,10 @@ public class Competion {
     private int nbPigeons;
 
     private double pourcentageAdmission = 25.0;
+
+    private LocalDateTime dateDébut;
+    private LocalDateTime dateFin;
+
 
     // Référence à la saison
     @DBRef
@@ -109,8 +114,23 @@ public class Competion {
 
     }
 
+    public LocalDateTime getDateDébut() {
+        return dateDébut;
+    }
 
-    public Competion(String id, String nom, LocalDateTime startDate, LocalDateTime endDate, String coordonnGPS, int nbPigeons, double pourcentageAdmission, Saison saison) {
+    public void setDateDébut(LocalDateTime dateDébut) {
+        this.dateDébut = dateDébut;
+    }
+
+    public LocalDateTime getDateFin() {
+        return dateFin;
+    }
+
+    public void setDateFin(LocalDateTime dateFin) {
+        this.dateFin = dateFin;
+    }
+
+    public Competion(String id, String nom, LocalDateTime startDate, LocalDateTime endDate, String coordonnGPS, int nbPigeons, double pourcentageAdmission, Saison saison, LocalDateTime dateDébut, LocalDateTime dateFin) {
         this.id = id;
         this.nom = nom;
         this.startDate = startDate;
@@ -119,5 +139,7 @@ public class Competion {
         this.nbPigeons = nbPigeons;
         this.pourcentageAdmission = pourcentageAdmission;
         this.saison = saison;
+        this.dateDébut=dateDébut;
+        this.dateFin=dateFin;
     }
 }

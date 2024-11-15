@@ -31,4 +31,9 @@ public class SaisonPigeonService {
         return saisonPigeonMapper.toDto(saisonPigeon);
     }
 
+    public SaisonPigeon getSaisonPigeonBySaisonIdAndPigeonId(ObjectId saisonId, ObjectId pigeonId) {
+        return saisonPigeonRepository.findSaisonPigeonBySaisonIdAndPigeonId(saisonId,pigeonId).orElseThrow(()->new RuntimeException("SaisonPigeon not found"));
+
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.pigeonskyrace.service;
 
+import com.pigeonskyrace.exception.EntityNotFoundException;
 import com.pigeonskyrace.model.Pigeon;
 import com.pigeonskyrace.model.enums.Sexe;
 import com.pigeonskyrace.repository.PigeonRepository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -16,24 +18,33 @@ public class PigeonService {
     @Autowired
     private PigeonRepository pigeonRepository;
 
+
     public Pigeon save(Pigeon pigeon) {
-        if (pigeon.getNumeroBague() == null) {
-            pigeon.setNumeroBague(generateNumeroBague(pigeon.getSexe(), pigeon.getDateNaissance()));
+        if (pigeon.numeroBague() == null) {
+            pigeon = pigeon.withNumeroBague(generateNumeroBague(pigeon.sexe(), pigeon.age())); // Mise à jour avec un numéro de bague
         }
         return pigeonRepository.save(pigeon);
     }
+
 
     public List<Pigeon> findAll() {
         return pigeonRepository.findAll();
     }
 
-    private String generateNumeroBague(Sexe sexe, LocalDate dateNaissance) {
+
+    public Pigeon findByNumeroBague(String numeroBague) {
+        return pigeonRepository.findByNumeroBague(numeroBague)
+                .orElseThrow(() -> new EntityNotFoundException("Pigeon avec numéro de bague " + numeroBague + " introuvable"));
+    }
+
+    // Génère un numéro de bague basé sur le sexe et l'âge
+    private String generateNumeroBague(Sexe sexe, Integer age) {
         String prefix = (sexe == Sexe.FEMALE) ? "F" : "M";
         Random rand = new Random();
-        int n = rand.nextInt(900) + 100; // Génère un nombre aléatoire de 3 chiffres
-        String yearSuffix = dateNaissance != null
-                ? dateNaissance.format(DateTimeFormatter.ofPattern("yy"))
-                : LocalDate.now().format(DateTimeFormatter.ofPattern("yy")); // Utilise l'année courante si `dateNaissance` est null
-        return prefix + "***" + n + "-" + yearSuffix;
+        int n = rand.nextInt(90) + 10; // Génère un nombre à deux chiffres
+        // Calcul de l'année de naissance
+        int birthYear = LocalDate.now().minusYears(age).getYear();
+        String yearSuffix = String.valueOf(birthYear).substring(2); // Prend les deux derniers chiffres de l'année
+        return prefix + "**" + n + "-" + yearSuffix;
     }
 }

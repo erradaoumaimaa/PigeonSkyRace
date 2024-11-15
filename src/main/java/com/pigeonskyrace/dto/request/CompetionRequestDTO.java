@@ -30,4 +30,6 @@ public class CompetionRequestDTO {
 
     private String saisonNom;
     private double pourcentageAdmission = 25.0;
+    private LocalDateTime dateDébut;
+    private LocalDateTime dateFin;
 }

@@ -12,5 +12,6 @@ public class CompetionReponseDTO {
     private String saisonNom;
     private int nbPigeons;
     private double pourcentageAdmission = 25.0;
-
+    private LocalDateTime dateDébut;
+    private LocalDateTime dateFin;
 }

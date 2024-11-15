@@ -8,31 +8,25 @@ import com.pigeonskyrace.service.ColombierService;
 import org.bson.types.ObjectId;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 @Mapper(componentModel = "spring")
-public abstract class PigeonMapper {
+public interface PigeonMapper {
 
-    @Autowired
-    private ColombierService colombierService;
+    PigeonMapper INSTANCE = Mappers.getMapper(PigeonMapper.class);
 
-    public abstract Pigeon toPigeon(PigeonRequestDTO pigeonRequestDTO);
+    @Mapping(target = "colombier.id", source = "colombierId")
+    Pigeon toPigeon(PigeonRequestDTO pigeonRequestDTO);
 
-    public abstract PigeonResponseDTO toPigeonResponseDTO(Pigeon pigeon);
+    PigeonResponseDTO toPigeonResponseDTO(Pigeon pigeon);
 
-    // Méthode de conversion personnalisée pour String -> Colombier
-    protected Colombier map(String colombierId) {
-        return colombierService.findByNomColombier(colombierId)
-                .orElse(null);
+
+    default String map(ObjectId value) {
+        return value != null ? value.toHexString() : null;
     }
 
-    // Méthode de conversion personnalisée pour Colombier -> String
-    protected String map(Colombier colombier) {
-        return colombier != null ? colombier.getNomColombier() : null;
-    }
-
-    String map(ObjectId value) {
-        return value != null ? value.toString() : null;
+    default ObjectId map(String value) {
+        return value != null ? new ObjectId(value) : null;
     }
 }

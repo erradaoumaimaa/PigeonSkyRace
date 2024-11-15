@@ -7,6 +7,7 @@ import com.pigeonskyrace.model.PigeonSaisonCompetition;
 import com.pigeonskyrace.repository.PigeonSaisonCompetitionRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,6 +31,12 @@ public class PigeonSaisonCompetitionService {
         PigeonSaisonCompetition savedEntity = repository.save(entity);
 
         return mapper.toResponseDTO(savedEntity);
+    }
+
+    public PigeonSaisonCompetition findBySeasonPigeonAndCompetition(ObjectId competitionId, ObjectId saisonPigeonId) throws ChangeSetPersister.NotFoundException {
+        return  repository.findPigeonSaisonCompetitionByCompetitionIdAndSaisonPigeonId(competitionId,saisonPigeonId).orElseThrow( () ->
+                new ChangeSetPersister.NotFoundException()
+        );
     }
 }
 
