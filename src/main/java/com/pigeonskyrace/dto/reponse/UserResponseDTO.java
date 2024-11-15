@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.Scanner;
+
 @Data
 public class UserResponseDTO {
     private String id;
@@ -23,4 +25,15 @@ public class UserResponseDTO {
         @Size(max = 100, message = "Les coordonnées GPS ne doivent pas dépasser 100 caractères")
         private String coordonneeGPS;
     }
+
+
+
+        public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+           System.out.println("donneer moi une phrase");
+           String mots= sc.nextLine();
+        }
+
+
+
 }

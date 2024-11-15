@@ -5,6 +5,8 @@ import com.pigeonskyrace.mapper.ColombierMapper;
 import com.pigeonskyrace.model.Colombier;
 import com.pigeonskyrace.service.ColombierService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,30 +17,28 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/colombiers")
+@RequestMapping("/api/v1/colombiers")
+@RequiredArgsConstructor
 public class ColombierController {
 
-    @Autowired
-    private ColombierService colombierService;
+    private final ColombierService colombierService;
+    private final ColombierMapper colombierMapper;
 
-    @Autowired
-    private ColombierMapper colombierMapper;
-
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<ColombierReponseDTO> createColombier(
-            @RequestBody UserResponseDTO.ColombierRequestDTO colombierRequestDTO,
+            @RequestBody @Valid UserResponseDTO.ColombierRequestDTO colombierRequestDTO,
             HttpSession session) {
 
+        // Vérification de l'utilisateur dans la session
         ObjectId userId = (ObjectId) session.getAttribute("userId");
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
-        // Utilisez le mapper pour créer le Colombier avec l'ID du propriétaire
-        Colombier colombier = colombierMapper.toColombier(colombierRequestDTO, userId);
 
-        Colombier savedColombier = colombierService.save(colombier);
-        return ResponseEntity.ok(colombierMapper.toColombierResponseDTO(savedColombier));
+        ColombierReponseDTO responseDTO = colombierService.save(colombierRequestDTO, userId);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
 
@@ -49,5 +49,6 @@ public class ColombierController {
                 .map(colombierMapper::toColombierResponseDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(colombierResponseDTOs);
+
     }
 }

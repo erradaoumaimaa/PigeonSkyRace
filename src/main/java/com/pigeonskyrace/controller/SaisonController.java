@@ -8,6 +8,7 @@ import com.pigeonskyrace.model.Saison;
 import com.pigeonskyrace.service.CompetionService;
 import com.pigeonskyrace.service.SaisonService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,34 +18,22 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/saisons")
+@RequestMapping("/api/v1/saisons")
+@RequiredArgsConstructor
 public class SaisonController {
 
-    @Autowired
-    private SaisonService saisonService;
-
-    @Autowired
-    private SaisonMapper saisonMapper;
-    @Autowired
-    private CompetionService competionService;
+    private final SaisonService saisonService;
+    private final SaisonMapper saisonMapper;
 
 
-    @PostMapping
-
+    @PostMapping("")
     public ResponseEntity<SaisonReponseDTO> createSaison(@RequestBody @Valid SaisonRequestDTO saisonRequestDTO) {
+        SaisonReponseDTO responseDTO = saisonService.createSaison(saisonRequestDTO);
 
-        Saison saison = saisonMapper.toEntity(saisonRequestDTO);
-
-        System.out.println("Mapped Saison: " + saison);
-
-        Saison savedSaison = saisonService.save(saison);
-
-        SaisonReponseDTO responseDTO = saisonMapper.toDto(savedSaison);
-
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<List<SaisonReponseDTO>> getAllSaisons() {
         List<Saison> saisons = saisonService.findAll();
         List<SaisonReponseDTO> responseDTOs = saisons.stream()
@@ -52,5 +41,5 @@ public class SaisonController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(responseDTOs);
     }
-}
 
+}

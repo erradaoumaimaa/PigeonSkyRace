@@ -33,7 +33,7 @@ public class UserService {
 
         // Mapper RegisterRequest en User
         User user = userMapper.toEntity(request);
-        user.setPassword(passwordEncoder.encode(request.getPassword())); // Hachage du mot de passe
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
         return "User registered successfully!";
     }

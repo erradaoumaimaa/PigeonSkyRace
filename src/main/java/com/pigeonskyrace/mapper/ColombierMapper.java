@@ -2,36 +2,30 @@ package com.pigeonskyrace.mapper;
 
 import com.pigeonskyrace.dto.reponse.ColombierReponseDTO;
 import com.pigeonskyrace.dto.reponse.UserResponseDTO;
+import com.pigeonskyrace.dto.request.ColombierRequestDTO;
 import com.pigeonskyrace.model.Colombier;
 import org.bson.types.ObjectId;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Context;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import org.mapstruct.factory.Mappers;
 
-@Component
-public class ColombierMapper {
 
-    public Colombier toColombier(UserResponseDTO.ColombierRequestDTO colombierRequestDTO, ObjectId proprietaireId) {
-        if (colombierRequestDTO == null) {
-            return null;
-        }
-        Colombier colombier = new Colombier();
-        colombier.setNomColombier(colombierRequestDTO.getNomColombier());
-        colombier.setCoordonneeGPS(colombierRequestDTO.getCoordonneeGPS());
-        colombier.setProprietaireId(proprietaireId); // Assigner l'ID du propriétaire ici
-        return colombier;
+@Mapper(componentModel = "spring")
+public interface ColombierMapper {
+
+    ColombierMapper INSTANCE = Mappers.getMapper(ColombierMapper.class);
+
+    @Named("objectIdToString")
+    default String objectIdToString(ObjectId objectId) {
+        return objectId != null ? objectId.toHexString() : null;
     }
 
 
-    public ColombierReponseDTO toColombierResponseDTO(Colombier colombier) {
-        if (colombier == null) {
-            return null;
-        }
-        ColombierReponseDTO responseDTO = new ColombierReponseDTO();
-        responseDTO.setId(colombier.getId());
-        responseDTO.setNomColombier(colombier.getNomColombier());
-        responseDTO.setCoordonneeGPS(colombier.getCoordonneeGPS());
-        responseDTO.setProprietaireId(
-                colombier.getProprietaire() != null ? colombier.getProprietaire().getId().toString() : null
-        );
-        return responseDTO;
-    }
+    @Mapping(target = "proprietaire.id", source = "userId")
+    Colombier toColombier(ColombierRequestDTO colombierRequestDTO, @Context ObjectId userId);
+
+    @Mapping(source = "proprietaire.id", target = "proprietaireId", qualifiedByName = "objectIdToString")
+    ColombierReponseDTO toColombierResponseDTO(Colombier colombier);
 }

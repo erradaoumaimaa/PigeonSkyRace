@@ -12,6 +12,6 @@ import lombok.Data;
         @Size(max = 50, message = "Le nom du colombier ne doit pas dépasser 50 caractères")
         private String nomColombier;
 
-        @Size(max = 100, message = "Les coordonnées GPS ne doivent pas dépasser 100 caractères")
-        private String coordonneeGPS;
+        private double coordonneeGPSlatitude;
+        private double coordonneeGPSlongitude;
 }

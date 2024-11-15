@@ -4,52 +4,50 @@ import com.pigeonskyrace.dto.reponse.CompetionReponseDTO;
 import com.pigeonskyrace.dto.request.CompetionRequestDTO;
 import com.pigeonskyrace.model.Competion;
 import org.bson.types.ObjectId;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
+import org.mapstruct.Named;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
+@Mapper(componentModel = "spring")
+public interface CompetionMapper {
 
-@Component
-public class CompetionMapper {
+    CompetionMapper INSTANCE = Mappers.getMapper(CompetionMapper.class);
 
-    public CompetionReponseDTO toDto(Competion competition) {
-        if (competition == null) {
-            return null;
-        }
+    @Mappings({
+            @Mapping(source = "id", target = "id"),
+            @Mapping(source = "nom", target = "nom"),
+            @Mapping(source = "latitudeGPS", target = "latitudeGPS"),
+            @Mapping(source = "longitudeGPS", target = "longitudeGPS"),
+            @Mapping(source = "nombrePigeons", target = "nbPigeons"),
+            @Mapping(source = "pourcentageAdmission", target = "pourcentageAdmission"),
+            @Mapping(source = "saison.id", target = "saisonId", qualifiedByName = "objectIdToString")
+    })
+    CompetionReponseDTO toDto(Competion competition);
 
-        CompetionReponseDTO dto = new CompetionReponseDTO();
+    @Mappings({
+            @Mapping(source = "nom", target = "nom"),
+            @Mapping(source = "latitudeGPS", target = "latitudeGPS"),
+            @Mapping(source = "longitudeGPS", target = "longitudeGPS"),
+            @Mapping(source = "nbPigeons", target = "nombrePigeons"),
+            @Mapping(target = "pourcentageAdmission", constant = "25.0"),
+            @Mapping(target = "id", ignore = true),
+            @Mapping(target = "saison", ignore = true)
+    })
+    Competion toEntity(CompetionRequestDTO competitionRequestDTO);
 
-        dto.setId(competition.getId() != null ? competition.getId().toString() : null);
-        dto.setNom(competition.getNom());
-        dto.setStartDate(competition.getStartDate());
-        dto.setEndDate(competition.getEndDate());
-        dto.setCoordonnGPS(competition.getCoordonnGPS());
-        dto.setNbPigeons(competition.getNbPigeons());
-        dto.setPourcentageAdmission(competition.getPourcentageAdmission() != 0.0 ? competition.getPourcentageAdmission() : 25.0);
 
 
-        if (competition.getSaison() != null) {
-            dto.setSaisonNom(competition.getSaison().getNom());
-        }
-
-        return dto;
+    // Map ObjectId to String
+    @Named("objectIdToString")
+    default String objectIdToString(ObjectId objectId) {
+        return objectId != null ? objectId.toHexString() : null;
     }
 
-    public Competion toEntity(CompetionRequestDTO competitionRequestDTO) {
-        if (competitionRequestDTO == null) {
-            return null;
-        }
-
-        Competion competition = new Competion();
-        competition.setNom(competitionRequestDTO.getNom());
-        competition.setStartDate(competitionRequestDTO.getStartDate());
-        competition.setEndDate(competitionRequestDTO.getEndDate());
-        competition.setCoordonnGPS(competitionRequestDTO.getCoordonnGPS());
-        competition.setNbPigeons(competitionRequestDTO.getNbPigeons());
-        competition.setPourcentageAdmission(25.0);
-
-        return competition;
-    }
-
-
-    public String map(ObjectId value) {
-        return value != null ? value.toString() : null;
+    // Map String to ObjectId
+    @Named("stringToObjectId")
+    default ObjectId stringToObjectId(String id) {
+        return id != null ? new ObjectId(id) : null;
     }
 }
