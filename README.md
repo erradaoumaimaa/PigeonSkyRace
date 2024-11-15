@@ -71,4 +71,4 @@ L'objectif est de garantir l'intégrité de la compétition grâce à une applic
 ### Étapes
 1. Clonez le dépôt :
    ```bash
-   git clone https://github.com/your-username/your-repo.git
+   git clone (https://github.com/erradaoumaimaa/PigeonSkyRace)
