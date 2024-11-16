@@ -6,7 +6,7 @@ import org.bson.types.ObjectId;
 
 @Data
 public class ColombierReponseDTO {
-    private ObjectId id;
+    private String id;
     private String nomColombier;
     private double coordonneeGPSlatitude;
     private double coordonneeGPSlongitude;

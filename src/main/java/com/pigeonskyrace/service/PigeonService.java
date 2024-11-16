@@ -1,9 +1,14 @@
 package com.pigeonskyrace.service;
 
+import com.pigeonskyrace.dto.reponse.PigeonResponseDTO;
+import com.pigeonskyrace.dto.request.PigeonRequestDTO;
 import com.pigeonskyrace.exception.EntityNotFoundException;
+import com.pigeonskyrace.mapper.PigeonMapper;
+import com.pigeonskyrace.model.Colombier;
 import com.pigeonskyrace.model.Pigeon;
 import com.pigeonskyrace.model.enums.Sexe;
 import com.pigeonskyrace.repository.PigeonRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +21,38 @@ import java.util.Random;
 @Service
 public class PigeonService {
     @Autowired
-    private PigeonRepository pigeonRepository;
+    private  PigeonRepository pigeonRepository;
+
+    @Autowired
+    private  ColombierService colombierService;
+
+    @Autowired
+    private  PigeonMapper pigeonMapper;
+
+    public PigeonResponseDTO createPigeon(PigeonRequestDTO pigeonRequestDTO) {
 
 
-    public Pigeon save(Pigeon pigeon) {
-        if (pigeon.numeroBague() == null) {
-            pigeon = pigeon.withNumeroBague(generateNumeroBague(pigeon.sexe(), pigeon.age())); // Mise à jour avec un numéro de bague
-        }
-        return pigeonRepository.save(pigeon);
+        Colombier colombier = colombierService.findById(new ObjectId(pigeonRequestDTO.getColombierId()))
+                .orElseThrow(() -> new RuntimeException("Colombier non trouvé pour l'ID : " + pigeonRequestDTO.getColombierId()));
+
+
+        Pigeon pigeon = pigeonMapper.toPigeon(pigeonRequestDTO);
+
+        // Créer un nouveau Pigeon avec le colombier associé
+        pigeon = new Pigeon(
+                pigeon.id(),
+                pigeon.numeroBague(),
+                pigeon.sexe(),
+                pigeon.age(),
+                pigeon.couleur(),
+                colombier
+        );
+
+
+        Pigeon savedPigeon = pigeonRepository.save(pigeon);
+
+        return pigeonMapper.toPigeonResponseDTO(savedPigeon);
     }
-
 
     public List<Pigeon> findAll() {
         return pigeonRepository.findAll();

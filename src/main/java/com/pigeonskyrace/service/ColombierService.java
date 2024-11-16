@@ -14,6 +14,7 @@ import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +38,11 @@ public class ColombierService {
     public List<Colombier> findAll() {
         return colombierRepository.findAll();
     }
+    public Optional<Colombier> findById(ObjectId id) {
+        return colombierRepository.findById(id);
+    }
+
+
     /**
      * Récupère les coordonnées GPS du colombier associé à un ID.
      *
@@ -50,5 +56,6 @@ public class ColombierService {
 
         return new Coordinates(colombier.getCoordonneeGPSlatitude(), colombier.getCoordonneeGPSlongitude());
     }
+
 
 }

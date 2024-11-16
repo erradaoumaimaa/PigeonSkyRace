@@ -39,7 +39,7 @@ public class ColombierController {
     }
 
 
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<List<ColombierReponseDTO>> getAllColombiers() {
         List<Colombier> colombiers = colombierService.findAll();
         List<ColombierReponseDTO> colombierResponseDTOs = colombiers.stream()

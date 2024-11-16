@@ -2,6 +2,7 @@ package com.pigeonskyrace.model;
 
 import com.pigeonskyrace.model.enums.Sexe;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -23,10 +24,11 @@ public record Pigeon(
         String numeroBague,
 
         @Indexed
-        @NotBlank(message = "Le sexe est requis")
+        @NotNull(message = "Le sexe est requis")
         Sexe sexe,
 
-        @NotBlank(message = "L'âge est requis")
+
+        @NotNull(message = "Le sexe est requis")
         Integer age,
 
         @NotBlank(message = "La couleur est requise")
@@ -49,6 +51,9 @@ public record Pigeon(
         );
     }
 
+    public Pigeon withColombier(Colombier newColombier) {
+        return new Pigeon(this.id, this.numeroBague, this.sexe, this.age, this.couleur, newColombier);
+    }
 
     private static String generateNumeroBague(Sexe sexe, Integer age) {
         String prefix = (sexe == Sexe.FEMALE) ? "F" : "M";
