@@ -3,6 +3,7 @@ package com.pigeonskyrace.controller;
 import com.pigeonskyrace.dto.reponse.SaisonPigeonResponseDTO;
 import com.pigeonskyrace.dto.request.SaisonPigeonRequestDTO;
 import com.pigeonskyrace.service.SaisonPigeonService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ public class SaisonPigeonController {
     @PostMapping("/{saisonId}/addPigeon")
     public SaisonPigeonResponseDTO addPigeonToSaison(
             @PathVariable String saisonId,
-            @RequestBody SaisonPigeonRequestDTO requestDTO) {
+            @Valid @RequestBody SaisonPigeonRequestDTO requestDTO) {
         return saisonPigeonService.addPigeonToSaison(saisonId, requestDTO);
     }
 

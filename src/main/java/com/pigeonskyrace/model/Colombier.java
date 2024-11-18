@@ -3,6 +3,7 @@ package com.pigeonskyrace.model;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
@@ -12,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.List;
-
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,7 +37,7 @@ public class Colombier {
 
     // Référence vers l'utilisateur qui possède ce colombier
     @DBRef
-    private User proprietaire;
+    private User user;
 
     // Liste des pigeons associés à ce colombier
     @DBRef
@@ -45,7 +46,7 @@ public class Colombier {
     public void setProprietaireId(ObjectId userId) {
         User user = new User();
         user.setId(userId);
-        this.proprietaire = user;
+        this.user = user;
     }
 
 }

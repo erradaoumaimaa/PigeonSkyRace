@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 public class ResultatReponseDTO {
-       private ObjectId id;
+       private String id;
         private Date dateArrivee;
 
         private Double distance;

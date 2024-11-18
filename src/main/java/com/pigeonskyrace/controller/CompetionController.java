@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/v1/competion")
+@RequestMapping("/api/v1/competions")
 @RequiredArgsConstructor
 public class CompetionController {
 
@@ -29,8 +29,8 @@ public class CompetionController {
     private final CompetionService competionService;
     private  final SaisonService  saisonService;
 
-    @PostMapping()
-    public ResponseEntity<CompetionReponseDTO> createCompetion(@RequestBody CompetionRequestDTO competionRequestDTO) {
+    @PostMapping("")
+    public ResponseEntity<CompetionReponseDTO> createCompetion(@RequestBody @Valid CompetionRequestDTO competionRequestDTO) {
         // Convertir CompetionRequestDTO en entité Competion
         Competion competion = competionMapper.toEntity(competionRequestDTO);
 
@@ -58,7 +58,7 @@ public class CompetionController {
     }
 
 
-    @GetMapping("/competions")
+    @GetMapping("")
     public ResponseEntity<List<CompetionReponseDTO>> getAllCompetions() {
         List<Competion> competions = competionService.findAll();
         List<CompetionReponseDTO> competionsDTO = competions.stream()
