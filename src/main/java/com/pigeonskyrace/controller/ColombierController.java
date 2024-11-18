@@ -32,15 +32,27 @@ public class ColombierController {
             @RequestBody @Valid com.pigeonskyrace.dto.request.ColombierRequestDTO colombierRequestDTO,
             HttpSession session) {
 
+        // Récupérer l'ID de l'utilisateur à partir de la session
         ObjectId userId = (ObjectId) session.getAttribute("userId");
+
+        // Vérifier si l'utilisateur est authentifié
         if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // Retourne 401 Unauthorized si l'utilisateur n'est pas authentifié
         }
 
-        ColombierReponseDTO responseDTO = colombierService.save(colombierRequestDTO, userId);
+        // Utiliser le service pour créer le colombier avec l'ID du propriétaire
+        try {
+            // Sauvegarder le colombier avec l'ID de l'utilisateur
+            ColombierReponseDTO responseDTO = colombierService.save(colombierRequestDTO, userId);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+            // Retourner une réponse avec statut 201 (Created) et le DTO du colombier créé
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+        } catch (Exception e) {
+            // En cas d'erreur, renvoyer un statut 500 (Internal Server Error)
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
+
 
 
     @GetMapping("")

@@ -2,13 +2,16 @@ package com.pigeonskyrace.service;
 
 import com.pigeonskyrace.dto.reponse.ColombierReponseDTO;
 import com.pigeonskyrace.dto.reponse.PigeonResponseDTO;
+import com.pigeonskyrace.dto.reponse.UserResponseDTO;
 import com.pigeonskyrace.dto.request.ColombierRequestDTO;
 import com.pigeonskyrace.exception.EntityNotFoundException;
 import com.pigeonskyrace.mapper.ColombierMapper;
 import com.pigeonskyrace.model.Colombier;
 import com.pigeonskyrace.model.Pigeon;
+import com.pigeonskyrace.model.User;
 import com.pigeonskyrace.repository.ColombierRepository;
 import com.pigeonskyrace.repository.PigeonRepository;
+import com.pigeonskyrace.repository.UserRepository;
 import com.pigeonskyrace.utils.Coordinates;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -25,14 +28,27 @@ public class ColombierService {
     private final ColombierRepository colombierRepository;
     private final PigeonRepository pigeonRepository;
     private final ColombierMapper colombierMapper;
+    private final UserRepository userRepository;
 
     public ColombierReponseDTO save(ColombierRequestDTO requestDTO, ObjectId userId) {
+        String userIdString = userId.toHexString();
+        // Récupérer l'utilisateur à partir de l'ID
+        User user = userRepository.findById(userIdString)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Mapper le DTO vers l'entité Colombier et assigner l'utilisateur
         Colombier colombier = colombierMapper.toColombier(requestDTO, userId);
 
-        colombier.setPigeons(new ArrayList<>()); // Initialise une liste vide
+        // Assigner l'utilisateur à l'entité Colombier
+        colombier.setUser(user);  // Assigner l'objet User complet
 
+        // Initialiser la liste des pigeons (vide au départ)
+        colombier.setPigeons(new ArrayList<>());
+
+        // Sauvegarder l'entité Colombier dans la base de données
         Colombier savedColombier = colombierRepository.save(colombier);
 
+        // Retourner le DTO correspondant à l'entité Colombier sauvegardée
         return colombierMapper.toColombierResponseDTO(savedColombier);
     }
 

@@ -35,11 +35,9 @@ public class Colombier {
     @Size(max=180 ,min=-180)
     private double coordonneeGPSlongitude;
 
-    // Référence vers l'utilisateur qui possède ce colombier
     @DBRef
     private User user;
 
-    // Liste des pigeons associés à ce colombier
     @DBRef
     private List<Pigeon> pigeons;
 
