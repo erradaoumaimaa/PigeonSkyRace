@@ -7,6 +7,7 @@ import com.pigeonskyrace.model.Competion;
 import com.pigeonskyrace.repository.CompetionRepository;
 import com.pigeonskyrace.utils.CompetitionId;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
@@ -34,18 +35,22 @@ public class CompetionService {
 
 
     public CompetionReponseDTO getCompetitionid(CompetitionId competitionId) {
-        System.out.println("Searching competition with ID: " + competitionId.toString());
-        Optional<Competion> competition = competionRepository.findById(competitionId.toString());
+        System.out.println("Searching competition with ID: " + competitionId.getValue());
+
+        // Convertir le String en ObjectId
+        ObjectId objectId = new ObjectId(competitionId.getValue());
+
+        // Recherche par ObjectId
+        Optional<Competion> competition = competionRepository.findById(objectId);
 
         if (competition.isPresent()) {
             System.out.println("Competition found: " + competition.get());
             return mapper.toDto(competition.get());
         } else {
-            System.out.println("Competition not found with ID: " + competitionId.toString());
-            throw new EntityNotFoundException("Competition not found for ID: " + competitionId.toString());
+            System.out.println("Competition not found with ID: " + competitionId.getValue());
+            throw new EntityNotFoundException("Competition not found for ID: " + competitionId.getValue());
         }
     }
-
 
 
 

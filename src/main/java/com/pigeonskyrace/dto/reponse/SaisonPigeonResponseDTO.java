@@ -1,6 +1,7 @@
 package com.pigeonskyrace.dto.reponse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pigeonskyrace.model.SaisonPigeon;
 import lombok.Data;
 import org.bson.types.ObjectId;
 
@@ -24,4 +25,12 @@ public class SaisonPigeonResponseDTO {
         return pigeonId.toHexString();
     }
     private ObjectId pigeonId;
+
+
+    public SaisonPigeon toEntity() {
+        SaisonPigeon saisonPigeon = new SaisonPigeon();
+        saisonPigeon.setPigeonId(this.pigeonId);
+        saisonPigeon.setSaisonId(this.saisonId);
+        return saisonPigeon;
+    }
 }

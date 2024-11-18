@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 @Repository
-public interface CompetionRepository extends MongoRepository<Competion, String> {
-    Optional<Competion> findById(String id);
+public interface CompetionRepository extends MongoRepository<Competion, ObjectId> {
+    Optional<Competion> findById(ObjectId id);
 }

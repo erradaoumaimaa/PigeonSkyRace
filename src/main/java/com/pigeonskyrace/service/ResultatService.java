@@ -2,6 +2,7 @@ package com.pigeonskyrace.service;
 
 import com.pigeonskyrace.dto.reponse.CompetionReponseDTO;
 import com.pigeonskyrace.dto.reponse.ResultatReponseDTO;
+import com.pigeonskyrace.dto.reponse.SaisonPigeonResponseDTO;
 import com.pigeonskyrace.dto.request.ResultatRequestDTO;
 import com.pigeonskyrace.exception.EntityNotFoundException;
 import com.pigeonskyrace.mapper.CompetionMapper;
@@ -40,17 +41,15 @@ public class ResultatService {
         }
 
         // Récupérer SaisonPigeon
-        SaisonPigeon saisonPigeon = saisonPigeonService.getSaisonPigeonBySaisonIdAndPigeonId(
+        // La méthode retourne un DTO, donc pas de vérification de null ici
+        SaisonPigeonResponseDTO saisonPigeonResponseDTO = saisonPigeonService.getSaisonPigeonBySaisonIdAndPigeonId(
                 competition.getSaisonId(), pigeon.id().toHexString());
-        if (saisonPigeon == null) {
-            throw new EntityNotFoundException("SaisonPigeon introuvable pour la saison " + competition.getSaisonId() + " et le pigeon " + pigeon.id());
-        }
 
         // Récupérer PigeonSaisonCompetition
         PigeonSaisonCompetition pigeonSaisonCompetition = pigeonSaisonCompetitionService
-                .findBySeasonPigeonAndCompetition(saisonPigeon, competionMapper.toEntityy(competition))
+                .findBySeasonPigeonAndCompetition(saisonPigeonResponseDTO.toEntity(), competionMapper.toEntityy(competition))
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Aucune participation trouvée pour le pigeon " + saisonPigeon.getPigeonId() +
+                        "Aucune participation trouvée pour le pigeon " + pigeon.id() +
                                 " dans la compétition " + competition.getId()));
 
         Resultat resultat = mapper.toEntity(resultatRequestDTO);
@@ -73,7 +72,6 @@ public class ResultatService {
 
         return mapper.toReponseDTO(resultat);
     }
-
 
     /**
      * Calcule le classement et les points pour tous les résultats d'une compétition.

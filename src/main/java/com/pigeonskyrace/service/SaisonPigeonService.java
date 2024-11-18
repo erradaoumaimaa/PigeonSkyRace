@@ -32,11 +32,20 @@ public class SaisonPigeonService {
         return saisonPigeonMapper.toDto(saisonPigeon);
     }
 
-    public SaisonPigeon getSaisonPigeonBySaisonIdAndPigeonId(String saisonId, String pigeonId) {
-        return saisonPigeonRepository.findBySaisonIdAndPigeonId(saisonId, pigeonId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "SaisonPigeon introuvable pour SaisonId " + saisonId + " et PigeonId " + pigeonId
-                ));
+    public SaisonPigeonResponseDTO getSaisonPigeonBySaisonIdAndPigeonId(String saisonId, String pigeonId) {
+        ObjectId saisonObjectId = new ObjectId(saisonId);
+        ObjectId pigeonObjectId = new ObjectId(pigeonId);
+
+        System.out.println("Recherche SaisonPigeon avec SaisonId: " + saisonObjectId + " et PigeonId: " + pigeonObjectId);
+
+        SaisonPigeon saisonPigeon = saisonPigeonRepository.findBySaisonIdAndPigeonId(saisonObjectId, pigeonObjectId)
+                .orElseThrow(() -> {
+                    String errorMessage = "SaisonPigeon not found for SaisonId: " + saisonId + " and PigeonId: " + pigeonId;
+                    System.out.println(errorMessage);
+                    return new EntityNotFoundException(errorMessage);
+                });
+
+        return saisonPigeonMapper.toDto(saisonPigeon);
     }
 
 

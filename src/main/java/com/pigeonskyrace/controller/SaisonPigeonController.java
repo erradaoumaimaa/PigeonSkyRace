@@ -5,6 +5,7 @@ import com.pigeonskyrace.dto.request.SaisonPigeonRequestDTO;
 import com.pigeonskyrace.service.SaisonPigeonService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,9 +22,12 @@ public class SaisonPigeonController {
         return saisonPigeonService.addPigeonToSaison(saisonId, requestDTO);
     }
 
-    @GetMapping("/{id}")
-    public SaisonPigeonResponseDTO getSaisonPigeonById(@PathVariable String id) {
-        return saisonPigeonService.getSaisonPigeonById(id);
+    @GetMapping("/{saisonId}/{pigeonId}")
+    public ResponseEntity<SaisonPigeonResponseDTO> getSaisonPigeonBySaisonIdAndPigeonId(
+            @PathVariable String saisonId,
+            @PathVariable String pigeonId) {
+        SaisonPigeonResponseDTO response = saisonPigeonService.getSaisonPigeonBySaisonIdAndPigeonId(saisonId, pigeonId);
+        return ResponseEntity.ok(response);
     }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Optional;
 
 public interface SaisonPigeonRepository extends MongoRepository<SaisonPigeon, String> {
-    Optional<SaisonPigeon> findBySaisonIdAndPigeonId(String saisonId, String pigeonId);
+
+    Optional<SaisonPigeon> findBySaisonIdAndPigeonId(ObjectId saisonId, ObjectId pigeonId);
 
 }

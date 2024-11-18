@@ -6,7 +6,7 @@ public class CompetitionId {
 
     private final String id;
 
-    private CompetitionId(String id) {
+    public CompetitionId(String id) {
         if (id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("Competition ID cannot be null or empty");
         }
