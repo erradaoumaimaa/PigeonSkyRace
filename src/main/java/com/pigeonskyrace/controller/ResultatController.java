@@ -4,41 +4,78 @@ package com.pigeonskyrace.controller;
 import com.pigeonskyrace.dto.reponse.CompetionReponseDTO;
 import com.pigeonskyrace.dto.reponse.ResultatReponseDTO;
 import com.pigeonskyrace.dto.request.ResultatRequestDTO;
+import com.pigeonskyrace.exception.EntityNotFoundException;
+import com.pigeonskyrace.model.Pigeon;
+import com.pigeonskyrace.model.PigeonSaisonCompetition;
+import com.pigeonskyrace.model.SaisonPigeon;
 import com.pigeonskyrace.service.CompetionService;
+import com.pigeonskyrace.service.PigeonService;
 import com.pigeonskyrace.service.ResultatService;
-import jakarta.validation.Valid;
+import com.pigeonskyrace.utils.CompetitionId;
+import com.pigeonskyrace.utils.ResponseApi;
 import lombok.RequiredArgsConstructor;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/resultats")
     public class ResultatController {
 
-        private final ResultatService resultatService;
-        private final CompetionService competionService;
-
-        // ca pour créer un résultat pour une compétition spécifique
-        @PostMapping("/{competitionId}")
-        public ResponseEntity<ResultatReponseDTO> createResultat(
-                @PathVariable String competitionId, // Récupération de l'ID de la compétition depuis l'URL
-                @Valid @RequestBody ResultatRequestDTO resultRequestDto) throws ChangeSetPersister.NotFoundException {
-
-            // Récupération des informations de la compétition à partir de son ID
-            CompetionReponseDTO competitionResponseDto = competionService.getCompetitionid(competitionId);
-
-            // Création du résultat en utilisant le service "resultatService" avec les informations de la compétition
-            ResultatReponseDTO responseDto = resultatService.createResult(resultRequestDto, competitionResponseDto);
-            String successMessage = "Les informations stockées avec succès pour la compétition : " ;
+    private final ResultatService resultatService;
+    private final CompetionService competionService;
+    private final PigeonService pigeonService;
 
 
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(responseDto);
+    @PostMapping("/{competitionId}")
+    public ResponseEntity<ResponseApi<ResultatReponseDTO>> createResult(
+            @PathVariable String competitionId,
+            @RequestBody ResultatRequestDTO requestDto) {
+
+        try {
+            log.info("Received request to create result for competition ID: {}", competitionId);
+
+            CompetionReponseDTO competitionDto = competionService.getCompetitionid(CompetitionId.fromString(competitionId));
+            log.info("Competition details retrieved: {}", competitionDto);
+
+            // Fetching pigeon details
+            log.info("Fetching pigeon details for bag number: {}", requestDto.numeroBague());
+            Pigeon pigeon = pigeonService.findByNumeroBague(requestDto.numeroBague());
+
+            log.info("Pigeon found: {}", pigeon);
+
+            ResultatReponseDTO responseDto = resultatService.createResult(requestDto, competitionDto);
+
+            ResponseApi<ResultatReponseDTO> response = new ResponseApi<>(responseDto,
+                    "Result successfully created for competition " + competitionId, HttpStatus.CREATED);
+
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        } catch (Exception e) {
+            log.error("Error occurred while creating result for competition ID: {}: {}", competitionId, e.getMessage(), e);
+            return new ResponseEntity<>(new ResponseApi<>(null, "Error occurred: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+
+
+    @GetMapping("/{competitionId}")
+    public ResponseEntity<List<ResultatReponseDTO>> calculateResults(@PathVariable String competitionId) throws ChangeSetPersister.NotFoundException {
+        CompetionReponseDTO competitionDto = competionService.getCompetitionid(CompetitionId.fromString(competitionId));
+        List<ResultatReponseDTO> results = resultatService.calculatePoint(competitionDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(results);
+    }
+
+}
+
 
 

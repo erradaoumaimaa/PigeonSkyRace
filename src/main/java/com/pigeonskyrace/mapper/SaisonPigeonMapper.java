@@ -6,25 +6,18 @@ import org.bson.types.ObjectId;
 import org.mapstruct.Named;
 import org.springframework.stereotype.Component;
 
-@Component
-public class SaisonPigeonMapper {
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-    public SaisonPigeon toEntity(SaisonPigeonRequestDTO dto, String saisonId) {
-        SaisonPigeon saisonPigeon = new SaisonPigeon();
-        saisonPigeon.setSaisonId(new ObjectId(saisonId));
-        saisonPigeon.setPigeonId(dto.getPigeonId());
-        return saisonPigeon;
-    }
+@Mapper(componentModel = "spring")
+public interface SaisonPigeonMapper {
 
+    SaisonPigeonMapper INSTANCE = Mappers.getMapper(SaisonPigeonMapper.class);
 
-    public SaisonPigeonResponseDTO toDto(SaisonPigeon saisonPigeon) {
-        SaisonPigeonResponseDTO responseDTO = new SaisonPigeonResponseDTO();
-        responseDTO.setId(saisonPigeon.getId());
-        responseDTO.setSaisonId(saisonPigeon.getSaisonId());
-        responseDTO.setPigeonId(saisonPigeon.getPigeonId());
-        return responseDTO;
-    }
+    @Mapping(target = "saisonId", expression = "java(new org.bson.types.ObjectId(saisonId))")
+    SaisonPigeon toEntity(SaisonPigeonRequestDTO dto, String saisonId);
 
-
+    SaisonPigeonResponseDTO toDto(SaisonPigeon saisonPigeon);
 }
 

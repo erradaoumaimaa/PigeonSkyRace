@@ -2,6 +2,7 @@ package com.pigeonskyrace.service;
 
 import com.pigeonskyrace.dto.reponse.SaisonPigeonResponseDTO;
 import com.pigeonskyrace.dto.request.SaisonPigeonRequestDTO;
+import com.pigeonskyrace.exception.EntityNotFoundException;
 import com.pigeonskyrace.mapper.SaisonPigeonMapper;
 import com.pigeonskyrace.model.SaisonPigeon;
 import com.pigeonskyrace.repository.SaisonPigeonRepository;
@@ -27,14 +28,17 @@ public class SaisonPigeonService {
     // Méthode pour obtenir une association spécifique par ID
     public SaisonPigeonResponseDTO getSaisonPigeonById(String id) {
         SaisonPigeon saisonPigeon = saisonPigeonRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("SaisonPigeon not found"));
+                .orElseThrow(() -> new EntityNotFoundException("SaisonPigeon not found with ID: " + id));
         return saisonPigeonMapper.toDto(saisonPigeon);
     }
 
-    public SaisonPigeon getSaisonPigeonBySaisonIdAndPigeonId(ObjectId saisonId, ObjectId pigeonId) {
-        return saisonPigeonRepository.findSaisonPigeonBySaisonIdAndPigeonId(saisonId, pigeonId)
-                .orElseThrow(() -> new RuntimeException("SaisonPigeon not found"));
+    public SaisonPigeon getSaisonPigeonBySaisonIdAndPigeonId(String saisonId, String pigeonId) {
+        return saisonPigeonRepository.findBySaisonIdAndPigeonId(saisonId, pigeonId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "SaisonPigeon introuvable pour SaisonId " + saisonId + " et PigeonId " + pigeonId
+                ));
     }
+
 
 
 

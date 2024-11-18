@@ -1,5 +1,6 @@
 package com.pigeonskyrace.service;
 
+import com.pigeonskyrace.dto.reponse.ColombierReponseDTO;
 import com.pigeonskyrace.dto.reponse.PigeonResponseDTO;
 import com.pigeonskyrace.dto.request.PigeonRequestDTO;
 import com.pigeonskyrace.exception.EntityNotFoundException;
@@ -27,32 +28,29 @@ public class PigeonService {
     private  ColombierService colombierService;
 
     @Autowired
-    private  PigeonMapper pigeonMapper;
+    private PigeonMapper pigeonMapper;
 
     public PigeonResponseDTO createPigeon(PigeonRequestDTO pigeonRequestDTO) {
-
-
+        // Récupérer le colombier via l'ID
         Colombier colombier = colombierService.findById(new ObjectId(pigeonRequestDTO.getColombierId()))
                 .orElseThrow(() -> new RuntimeException("Colombier non trouvé pour l'ID : " + pigeonRequestDTO.getColombierId()));
 
+        // Mapper PigeonRequestDTO en Pigeon avec le colombier trouvé
+        Pigeon pigeon = pigeonMapper.toPigeon(pigeonRequestDTO).withColombier(colombier);
 
-        Pigeon pigeon = pigeonMapper.toPigeon(pigeonRequestDTO);
-
-        // Créer un nouveau Pigeon avec le colombier associé
-        pigeon = new Pigeon(
-                pigeon.id(),
-                pigeon.numeroBague(),
-                pigeon.sexe(),
-                pigeon.age(),
-                pigeon.couleur(),
-                colombier
-        );
-
-
+        // Sauvegarder le pigeon dans la base de données
         Pigeon savedPigeon = pigeonRepository.save(pigeon);
 
+        // Retourner le DTO du Pigeon
         return pigeonMapper.toPigeonResponseDTO(savedPigeon);
     }
+
+
+
+    public List<Pigeon> findByColombierId(ObjectId colombierId) {
+        return pigeonRepository.findByColombierId(colombierId);
+    }
+
 
     public List<Pigeon> findAll() {
         return pigeonRepository.findAll();

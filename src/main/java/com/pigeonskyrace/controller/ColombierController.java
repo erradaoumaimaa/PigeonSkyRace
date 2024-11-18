@@ -1,9 +1,12 @@
 package com.pigeonskyrace.controller;
 import com.pigeonskyrace.dto.reponse.ColombierReponseDTO;
+import com.pigeonskyrace.dto.reponse.PigeonResponseDTO;
 import com.pigeonskyrace.dto.request.ColombierRequestDTO;
 import com.pigeonskyrace.mapper.ColombierMapper;
 import com.pigeonskyrace.model.Colombier;
+import com.pigeonskyrace.model.Pigeon;
 import com.pigeonskyrace.service.ColombierService;
+import com.pigeonskyrace.service.PigeonService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,7 @@ public class ColombierController {
 
     private final ColombierService colombierService;
     private final ColombierMapper colombierMapper;
+    private final PigeonService pigeonService;
 
     @PostMapping("")
     public ResponseEntity<ColombierReponseDTO> createColombier(
@@ -42,10 +46,27 @@ public class ColombierController {
     @GetMapping("")
     public ResponseEntity<List<ColombierReponseDTO>> getAllColombiers() {
         List<Colombier> colombiers = colombierService.findAll();
-        List<ColombierReponseDTO> colombierResponseDTOs = colombiers.stream()
-                .map(colombierMapper::toColombierResponseDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(colombierResponseDTOs);
 
+        // Mapper les colombiers en DTO et ajouter les pigeons associés
+        List<ColombierReponseDTO> colombierResponseDTOs = colombiers.stream()
+                .map(colombier -> {
+                    List<Pigeon> pigeons = pigeonService.findByColombierId(colombier.getId());
+                    List<PigeonResponseDTO> pigeonDTOs = pigeons.stream()
+                            .map(pigeon -> new PigeonResponseDTO(
+                                    pigeon.id().toHexString(),
+                                    pigeon.numeroBague(),
+                                    pigeon.sexe(),
+                                    pigeon.age(),
+                                    pigeon.couleur()))
+                            .collect(Collectors.toList());
+
+
+                    ColombierReponseDTO dto = colombierMapper.toColombierResponseDTO(colombier);
+                    dto.setPigeons(pigeonDTOs);
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(colombierResponseDTOs);
     }
 }
