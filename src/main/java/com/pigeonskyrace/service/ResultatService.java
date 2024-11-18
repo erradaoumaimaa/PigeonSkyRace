@@ -43,20 +43,20 @@ public class ResultatService {
         // Récupérer SaisonPigeon
         // La méthode retourne un DTO, donc pas de vérification de null ici
         SaisonPigeonResponseDTO saisonPigeonResponseDTO = saisonPigeonService.getSaisonPigeonBySaisonIdAndPigeonId(
-                competition.getSaisonId(), pigeon.id().toHexString());
+                competition.getSaisonId(), pigeon.getId().toHexString());
 
         // Récupérer PigeonSaisonCompetition
         PigeonSaisonCompetition pigeonSaisonCompetition = pigeonSaisonCompetitionService
                 .findBySeasonPigeonAndCompetition(saisonPigeonResponseDTO.toEntity(), competionMapper.toEntityy(competition))
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Aucune participation trouvée pour le pigeon " + pigeon.id() +
+                        "Aucune participation trouvée pour le pigeon " + pigeon.getId() +
                                 " dans la compétition " + competition.getId()));
 
         Resultat resultat = mapper.toEntity(resultatRequestDTO);
         resultat.setPigeonSaisonCompetition(pigeonSaisonCompetition);
 
         // Calculer la distance
-        Coordinates coordonneesColombier = colombierService.getLoftCoordinates(pigeon.id());
+        Coordinates coordonneesColombier = colombierService.getLoftCoordinates(pigeon.getId());
         double distance = calculerDistance(
                 coordonneesColombier.getLatitude(), coordonneesColombier.getLongitude(),
                 competition.getLatitudeGPS(), competition.getLongitudeGPS());

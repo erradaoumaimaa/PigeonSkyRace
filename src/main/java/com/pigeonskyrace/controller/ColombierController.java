@@ -65,11 +65,11 @@ public class ColombierController {
                     List<Pigeon> pigeons = pigeonService.findByColombierId(colombier.getId());
                     List<PigeonResponseDTO> pigeonDTOs = pigeons.stream()
                             .map(pigeon -> new PigeonResponseDTO(
-                                    pigeon.id().toHexString(),
-                                    pigeon.numeroBague(),
-                                    pigeon.sexe(),
-                                    pigeon.age(),
-                                    pigeon.couleur()))
+                                    pigeon.getId().toHexString(),
+                                    pigeon.getNumeroBague(),
+                                    pigeon.getSexe(),
+                                    pigeon.getAge(),
+                                    pigeon.getCouleur()))
                             .collect(Collectors.toList());
 
 
