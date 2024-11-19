@@ -9,9 +9,10 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ResultatMapper {
 
-Resultat toEntity(ResultatRequestDTO resultatRequestDTO);
-@Mapping(target = "id", expression = "java(resultat.getId().toHexString())")
-ResultatReponseDTO toReponseDTO(Resultat resultat);
+    @Mapping(source = "dateArrivee", target = "dateArrivee")
+    Resultat toEntity(ResultatRequestDTO resultatRequestDTO);
+    @Mapping(target = "id", expression = "java(resultat.getId().toHexString())")
+    ResultatReponseDTO toReponseDTO(Resultat resultat);
 
 
 }
