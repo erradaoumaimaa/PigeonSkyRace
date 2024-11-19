@@ -1,27 +1,23 @@
 package com.pigeonskyrace.service;
 
 import com.pigeonskyrace.dto.reponse.CompetionReponseDTO;
-import com.pigeonskyrace.dto.reponse.PigeonSaisonCompetitionResponseDTO;
 import com.pigeonskyrace.dto.reponse.ResultatReponseDTO;
 import com.pigeonskyrace.dto.reponse.SaisonPigeonResponseDTO;
-import com.pigeonskyrace.dto.request.PigeonSaisonCompetitionRequestDTO;
 import com.pigeonskyrace.dto.request.ResultatRequestDTO;
 import com.pigeonskyrace.exception.EntityNotFoundException;
 import com.pigeonskyrace.mapper.CompetionMapper;
-import com.pigeonskyrace.mapper.PigeonSaisonCompetitionMapper;
 import com.pigeonskyrace.mapper.ResultatMapper;
 import com.pigeonskyrace.model.*;
 import com.pigeonskyrace.repository.ResultatRepository;
 import com.pigeonskyrace.utils.Coordinates;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
-@Slf4j
+
 @Service
 @RequiredArgsConstructor
 public class ResultatService {
@@ -31,7 +27,6 @@ public class ResultatService {
     private final PigeonSaisonCompetitionService pigeonSaisonCompetitionService;
     private final ColombierService colombierService;
     private final ResultatRepository resultatRepository;
-    private final PigeonSaisonCompetitionMapper pigeonSaisonCompetitionMapper;
     private final CompetionMapper competionMapper;
     private final ResultatMapper mapper;
 
@@ -46,18 +41,16 @@ public class ResultatService {
         }
 
         // Récupérer SaisonPigeon
+        // La méthode retourne un DTO, donc pas de vérification de null ici
         SaisonPigeonResponseDTO saisonPigeonResponseDTO = saisonPigeonService.getSaisonPigeonBySaisonIdAndPigeonId(
                 competition.getSaisonId(), pigeon.getId().toHexString());
 
         // Récupérer PigeonSaisonCompetition
-
-
         PigeonSaisonCompetition pigeonSaisonCompetition = pigeonSaisonCompetitionService
                 .findBySeasonPigeonAndCompetition(saisonPigeonResponseDTO.toEntity(), competionMapper.toEntityy(competition))
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Aucune participation trouvée pour le pigeon " + pigeon.getId() +
                                 " dans la compétition " + competition.getId()));
-
 
         Resultat resultat = mapper.toEntity(resultatRequestDTO);
         resultat.setPigeonSaisonCompetition(pigeonSaisonCompetition);
@@ -142,31 +135,4 @@ public class ResultatService {
 
         return 6371.01 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); // Distance en km
     }
-
-
-    private PigeonSaisonCompetition inscrirePigeonDansCompetition(Pigeon pigeon, SaisonPigeonResponseDTO saisonPigeonResponseDTO, CompetionReponseDTO competition) {
-        // Créer une nouvelle instance de PigeonSaisonCompetition pour inscrire le pigeon dans la compétition
-        PigeonSaisonCompetition pigeonSaisonCompetition = new PigeonSaisonCompetition();
-        pigeonSaisonCompetition.setSaisonPigeon(saisonPigeonResponseDTO.toEntity()); // Conversion en entité
-        pigeonSaisonCompetition.setCompetition(competionMapper.toEntityy(competition)); // Conversion en entité
-
-        // Vérifier si l'inscription échoue
-        try {
-            pigeonSaisonCompetition = pigeonSaisonCompetitionService.registerPigeonInCompetition(pigeonSaisonCompetition); // Enregistrer l'inscription
-            if (pigeonSaisonCompetition == null) {
-                throw new IllegalStateException("Échec de l'inscription du pigeon dans la compétition.");
-            }
-        } catch (Exception e) {
-            // Loggez l'exception pour un diagnostic plus approfondi
-            log.error("Erreur lors de l'inscription du pigeon dans la compétition", e);
-            throw new EntityNotFoundException("Impossible d'inscrire le pigeon dans la compétition : " + e.getMessage());
-        }
-
-        return pigeonSaisonCompetition;
-    }
-
-
-
-
-
 }

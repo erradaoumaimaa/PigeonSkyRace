@@ -12,7 +12,6 @@ import com.pigeonskyrace.utils.CompetitionId;
 import com.pigeonskyrace.utils.ResponseApi;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
