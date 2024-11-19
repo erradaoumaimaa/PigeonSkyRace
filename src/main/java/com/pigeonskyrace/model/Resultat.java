@@ -1,4 +1,5 @@
 package com.pigeonskyrace.model;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -22,7 +23,7 @@ public class Resultat {
         @MongoId
         private ObjectId id;
 
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime dateArrivee;
 
         @Positive
