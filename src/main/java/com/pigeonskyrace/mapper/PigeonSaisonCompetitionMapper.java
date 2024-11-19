@@ -13,23 +13,16 @@ import org.mapstruct.Named;
 public interface PigeonSaisonCompetitionMapper {
 
     @Mappings({
-            @Mapping(source = "saisonPigeonId", target = "saisonPigeonId", qualifiedByName = "stringToObjectId"),
-            @Mapping(source = "competitionId", target = "competitionId", qualifiedByName = "stringToObjectId"),
             @Mapping(target = "id", ignore = true)
     })
     PigeonSaisonCompetition toEntity(PigeonSaisonCompetitionRequestDTO requestDTO);
 
     @Mappings({
             @Mapping(source = "id", target = "id", qualifiedByName = "objectIdToString"),
-            @Mapping(source = "saisonPigeonId", target = "saisonPigeonId", qualifiedByName = "objectIdToString"),
-            @Mapping(source = "competitionId", target = "competitionId", qualifiedByName = "objectIdToString")
     })
     PigeonSaisonCompetitionResponseDTO toResponseDTO(PigeonSaisonCompetition entity);
 
     @Mappings({
-            @Mapping(source = "saisonPigeonId", target = "saisonPigeonId", qualifiedByName = "objectIdToString"),
-
-            @Mapping(source = "competitionId", target = "competitionId", qualifiedByName = "objectIdToString")
     })
     PigeonSaisonCompetitionRequestDTO toRequestDTO(PigeonSaisonCompetition pigeonSaisonCompetition);
 
