@@ -63,7 +63,7 @@ public class ResultatService {
         resultat.setPigeonSaisonCompetition(pigeonSaisonCompetition);
 
         // Calculer la distance
-        Coordinates coordonneesColombier = colombierService.getLoftCoordinates(pigeon.getId());
+        Coordinates coordonneesColombier = colombierService.getLoftCoordinates(pigeon.getColombier().getId());
         double distance = calculerDistance(
                 coordonneesColombier.getLatitude(), coordonneesColombier.getLongitude(),
                 competition.getLatitudeGPS(), competition.getLongitudeGPS());

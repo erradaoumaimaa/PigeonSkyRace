@@ -32,14 +32,13 @@ public class ColombierService {
 
     public ColombierReponseDTO save(ColombierRequestDTO requestDTO, ObjectId userId) {
         String userIdString = userId.toHexString();
-        // Récupérer l'utilisateur à partir de l'ID
         User user = userRepository.findById(userIdString)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Mapper le DTO vers l'entité Colombier et assigner l'utilisateur
+
         Colombier colombier = colombierMapper.toColombier(requestDTO, userId);
 
-        // Assigner l'utilisateur à l'entité Colombier
+
         colombier.setUser(user);  // Assigner l'objet User complet
 
         // Initialiser la liste des pigeons (vide au départ)
@@ -58,6 +57,7 @@ public class ColombierService {
     public List<Colombier> findAll() {
         return colombierRepository.findAll();
     }
+
     public Optional<Colombier> findById(ObjectId id) {
 
         Colombier colombier = colombierRepository.findById(id)

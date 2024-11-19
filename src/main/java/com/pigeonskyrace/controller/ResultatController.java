@@ -42,7 +42,6 @@ import java.util.List;
             CompetionReponseDTO competitionDto = competionService.getCompetitionid(CompetitionId.fromString(competitionId));
             log.info("Competition details retrieved: {}", competitionDto);
 
-            // Fetching pigeon details
             log.info("Fetching pigeon details for bag number: {}", requestDto.numeroBague());
             Pigeon pigeon = pigeonService.findByNumeroBague(requestDto.numeroBague());
 
