@@ -14,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class ResultatReponseDTO {
        private String id;
-        private Date dateArrivee;
+        private LocalDateTime dateArrivee;
 
         private Double distance;
 
