@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public record ResultatRequestDTO (
 
         @NotNull String numeroBague,
-        @NotNull LocalDateTime dateArrivée
+        @NotNull LocalDateTime dateArrivee
 
 
 ){}

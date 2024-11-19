@@ -10,12 +10,14 @@ import com.pigeonskyrace.service.PigeonService;
 import com.pigeonskyrace.service.ResultatService;
 import com.pigeonskyrace.utils.CompetitionId;
 import com.pigeonskyrace.utils.ResponseApi;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RestController
+@Validated
 @RequestMapping("/api/v1/resultats")
     public class ResultatController {
 
@@ -34,7 +37,7 @@ import java.util.List;
     @PostMapping("/{competitionId}")
     public ResponseEntity<ResponseApi<ResultatReponseDTO>> createResult(
             @PathVariable String competitionId,
-            @RequestBody ResultatRequestDTO requestDto) {
+            @RequestBody @Valid ResultatRequestDTO requestDto) {
 
         try {
             log.info("Received request to create result for competition ID: {}", competitionId);
