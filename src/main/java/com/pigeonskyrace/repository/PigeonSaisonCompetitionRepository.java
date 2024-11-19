@@ -13,5 +13,5 @@ import java.util.Optional;
 @Repository
 public interface PigeonSaisonCompetitionRepository extends MongoRepository<PigeonSaisonCompetition, ObjectId> {
     boolean existsBySaisonPigeonIdAndCompetitionId(ObjectId saisonPigeonId, ObjectId competitionId);
-    Optional<PigeonSaisonCompetition> findBySaisonPigeonIdAndCompetitionId(SaisonPigeon seasonPigeon, Competion competition);
+    Optional<PigeonSaisonCompetition> findBySaisonPigeonIdAndCompetitionId(ObjectId saisonPigeonId, ObjectId competitionId);
 }

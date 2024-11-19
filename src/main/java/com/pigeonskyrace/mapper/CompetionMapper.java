@@ -43,7 +43,7 @@ public interface CompetionMapper {
             @Mapping(source = "longitudeGPS", target = "longitudeGPS"),
             @Mapping(source = "nbPigeons", target = "nombrePigeons"),
             @Mapping(target = "pourcentageAdmission", constant = "25.0"),
-            @Mapping(target = "id", ignore = true),
+//            @Mapping(target = "id", ignore = true),
             @Mapping(target = "saison", ignore = true)
     })
     Competion toEntityy(CompetionReponseDTO competitionReponseDTO);
