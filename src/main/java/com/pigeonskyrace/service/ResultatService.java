@@ -15,10 +15,12 @@ import com.pigeonskyrace.repository.ResultatRepository;
 import com.pigeonskyrace.utils.Coordinates;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @Slf4j
@@ -80,43 +82,69 @@ public class ResultatService {
         return mapper.toReponseDTO(resultat);
     }
 
-    /**
-     * Calcule le classement et les points pour tous les résultats d'une compétition.
-     */
     public List<ResultatReponseDTO> calculatePoint(CompetionReponseDTO competitionDto) {
-        // Utilisation de la méthode modifiée dans ResultatRepository
-        List<Resultat> resultats = resultatRepository.findByPigeonSaisonCompetition_Competition_Id(competitionDto.getId());
+        // Retrieve competition pigeons
+        List<PigeonSaisonCompetition> competitionPigeon = pigeonSaisonCompetitionService
+                .findByCompetition(competionMapper.toEntityy(competitionDto));
 
-        if (resultats.isEmpty()) {
-            throw new EntityNotFoundException("Aucun résultat trouvé pour cette compétition.");
+        log.info("Competition Entity: {}", competionMapper.toEntityy(competitionDto));
+        log.info("Pigeons retrieved: {}", competitionPigeon);
+
+        // Collect results
+        List<Resultat> results = new ArrayList<>();
+        for (PigeonSaisonCompetition cp : competitionPigeon) {
+            Optional<Resultat> optionalResult = resultatRepository.findByPigeonSaisonCompetition(cp);
+            optionalResult.ifPresentOrElse(results::add, () ->
+                    log.warn("No result found for PigeonSaisonCompetition: {}", cp)
+            );
         }
 
-        // Calcul de la distance moyenne pour ajuster les vitesses
-        double distanceMoyenne = resultats.stream()
+        if (results.isEmpty()) {
+            throw new EntityNotFoundException("No results found for this competition.");
+        }
+
+        // Sort results by speed (descending)
+        List<Resultat> sortedResults = results.stream()
+                .sorted((curr, next) -> Double.compare(next.getVitesse(), curr.getVitesse()))
+                .toList();
+        log.info("Sorted Results: {}", sortedResults);
+
+        // Compute average distance
+        double distanceMoyenne = sortedResults.stream()
                 .mapToDouble(Resultat::getDistance)
                 .average()
                 .orElse(0.0);
 
-        // Appliquer le coefficient d'ajustement et recalculer les vitesses
-        resultats.forEach(resultat -> {
-            double coefficient = distanceMoyenne / resultat.getDistance();
-            resultat.setVitesse(resultat.getVitesse() * coefficient);
+        log.info("Average Distance: {}", distanceMoyenne);
+
+        // Adjust speed based on average distance
+        sortedResults.forEach(resultat -> {
+            if (resultat.getDistance() > 0) {
+                double coefficient = distanceMoyenne / resultat.getDistance();
+                resultat.setVitesse(resultat.getVitesse() * coefficient);
+            } else {
+                log.warn("Invalid distance for result: {}", resultat);
+            }
         });
 
-        // Trier par vitesse décroissante et attribuer classement/points
-        resultats.sort((r1, r2) -> Double.compare(r2.getVitesse(), r1.getVitesse()));
+        // Re-sort by adjusted speed
+        sortedResults.sort((r1, r2) -> Double.compare(r2.getVitesse(), r1.getVitesse()));
 
-        for (int i = 0; i < resultats.size(); i++) {
-            Resultat resultat = resultats.get(i);
+        // Assign points and rankings
+        for (int i = 0; i < sortedResults.size(); i++) {
+            Resultat resultat = sortedResults.get(i);
             resultat.setClassement(i + 1);
-            resultat.setPoints(100.0 - (i * 100.0 / resultats.size())); // Exemple : 100 points max
+            resultat.setPoints(100.0 - (i * 100.0 / sortedResults.size()));
             resultatRepository.save(resultat);
         }
 
-        return resultats.stream()
+        // Convert results to DTO
+        return sortedResults.stream()
                 .map(mapper::toReponseDTO)
                 .toList();
     }
+
+
 
     private double calculerVitesse(double distance, Duration tempsDeVol) {
         if (tempsDeVol.toMinutes() <= 0) {
@@ -144,26 +172,7 @@ public class ResultatService {
     }
 
 
-    private PigeonSaisonCompetition inscrirePigeonDansCompetition(Pigeon pigeon, SaisonPigeonResponseDTO saisonPigeonResponseDTO, CompetionReponseDTO competition) {
-        // Créer une nouvelle instance de PigeonSaisonCompetition pour inscrire le pigeon dans la compétition
-        PigeonSaisonCompetition pigeonSaisonCompetition = new PigeonSaisonCompetition();
-        pigeonSaisonCompetition.setSaisonPigeon(saisonPigeonResponseDTO.toEntity()); // Conversion en entité
-        pigeonSaisonCompetition.setCompetition(competionMapper.toEntityy(competition)); // Conversion en entité
 
-        // Vérifier si l'inscription échoue
-        try {
-            pigeonSaisonCompetition = pigeonSaisonCompetitionService.registerPigeonInCompetition(pigeonSaisonCompetition); // Enregistrer l'inscription
-            if (pigeonSaisonCompetition == null) {
-                throw new IllegalStateException("Échec de l'inscription du pigeon dans la compétition.");
-            }
-        } catch (Exception e) {
-            // Loggez l'exception pour un diagnostic plus approfondi
-            log.error("Erreur lors de l'inscription du pigeon dans la compétition", e);
-            throw new EntityNotFoundException("Impossible d'inscrire le pigeon dans la compétition : " + e.getMessage());
-        }
-
-        return pigeonSaisonCompetition;
-    }
 
 
 

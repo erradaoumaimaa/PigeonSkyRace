@@ -1,19 +1,20 @@
 package com.pigeonskyrace.service;
 
-import com.pigeonskyrace.dto.reponse.PigeonSaisonCompetitionResponseDTO;
-import com.pigeonskyrace.dto.request.PigeonSaisonCompetitionRequestDTO;
 import com.pigeonskyrace.exception.EntityNotFoundException;
 import com.pigeonskyrace.mapper.PigeonSaisonCompetitionMapper;
 import com.pigeonskyrace.model.Competion;
 import com.pigeonskyrace.model.PigeonSaisonCompetition;
 import com.pigeonskyrace.model.SaisonPigeon;
 import com.pigeonskyrace.repository.PigeonSaisonCompetitionRepository;
+import com.pigeonskyrace.utils.CompetitionId;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
-
+@Slf4j
 @Service
 public class PigeonSaisonCompetitionService {
 
@@ -26,10 +27,10 @@ public class PigeonSaisonCompetitionService {
     public PigeonSaisonCompetition registerPigeonInCompetition(PigeonSaisonCompetition pigeonSaisonCompetition) {
         // Convertir l'ID SaisonPigeon et Competition de String en ObjectId si nécessaire
         ObjectId saisonPigeonId = pigeonSaisonCompetition.getSaisonPigeon().getId();
-        ObjectId competitionId = new ObjectId(pigeonSaisonCompetition.getCompetition().getId());
+        String competitionId = pigeonSaisonCompetition.getCompetition().getId();
 
         // Vérifier si l'inscription existe déjà
-        if (repository.existsBySaisonPigeonIdAndCompetitionId(saisonPigeonId, competitionId)) {
+        if (repository.existsBySaisonPigeonIdAndCompetitionId(saisonPigeonId, new ObjectId(competitionId))) {
             throw new IllegalStateException("Ce pigeon est déjà inscrit dans cette compétition.");
         }
 
@@ -47,12 +48,16 @@ public class PigeonSaisonCompetitionService {
 
     public Optional<PigeonSaisonCompetition> findBySeasonPigeonAndCompetition(SaisonPigeon saisonPigeonId, Competion competitionId) {
         try {
-            return repository.findBySaisonPigeonIdAndCompetitionId(saisonPigeonId.getId(), new ObjectId(competitionId.getId()));
+            return repository.findBySaisonPigeonIdAndCompetitionId(saisonPigeonId.getId(),new ObjectId(competitionId.getId()));
         } catch (Exception e) {
             throw new EntityNotFoundException("No matching PigeonSaisonCompetition found for the given IDs.");
         }
     }
 
+    public List<PigeonSaisonCompetition> findByCompetition(Competion competition) {
+        log.info("Recherche des PigeonSaisonCompetitions pour la compétition : {}", competition);
+        return repository.findAllByCompetition(competition) .orElseThrow(() -> new EntityNotFoundException("No pigeons found for the competition."));
+    }
 
 
 

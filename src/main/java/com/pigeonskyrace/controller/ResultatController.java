@@ -65,8 +65,9 @@ import java.util.List;
 
 
     @GetMapping("/{competitionId}")
-    public ResponseEntity<List<ResultatReponseDTO>> calculateResults(@PathVariable String competitionId) throws ChangeSetPersister.NotFoundException {
-        CompetionReponseDTO competitionDto = competionService.getCompetitionid(CompetitionId.fromString(competitionId));
+    public ResponseEntity<List<ResultatReponseDTO>> calculateResults(@PathVariable String competitionId) {
+        CompetionReponseDTO competitionDto = competionService.getCompetitionid(CompetitionId.toCompetitionId(competitionId));
+        log.info("Competition details retrieved: {}", competitionDto);
         List<ResultatReponseDTO> results = resultatService.calculatePoint(competitionDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(results);

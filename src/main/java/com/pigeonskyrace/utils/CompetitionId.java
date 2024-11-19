@@ -19,6 +19,9 @@ public class CompetitionId {
         }
         return new CompetitionId(id);
     }
+    public static CompetitionId toCompetitionId(String id) {
+        return new CompetitionId(id);
+    }
 
     public String getValue() {
         return id;
