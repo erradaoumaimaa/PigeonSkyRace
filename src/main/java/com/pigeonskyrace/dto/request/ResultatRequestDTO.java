@@ -10,10 +10,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
-public record ResultatRequestDTO (
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+public record ResultatRequestDTO(
 
         @NotNull String numeroBague,
-        @NotNull LocalDateTime dateArrivée
 
+        @NotNull
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        LocalDateTime dateArrivee
 
-){}
+) {}
