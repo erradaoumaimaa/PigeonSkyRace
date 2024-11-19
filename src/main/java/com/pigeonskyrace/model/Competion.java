@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
     public class Competion {
 
     @MongoId
-    private String id;
+    private ObjectId id;
 
     @NotBlank(message = "Le nom est requis")
     @Size(max = 100, message = "Le nom ne doit pas dépasser 100 caractères")

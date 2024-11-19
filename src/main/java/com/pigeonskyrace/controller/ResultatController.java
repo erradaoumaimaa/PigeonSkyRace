@@ -45,6 +45,14 @@ import java.util.List;
             CompetionReponseDTO competitionDto = competionService.getCompetitionid(CompetitionId.fromString(competitionId));
             log.info("Competition details retrieved: {}", competitionDto);
 
+            log.info("Received raw request body: {}", requestDto);
+
+            if (requestDto.dateArrivee() == null) {
+                throw new IllegalArgumentException("Le champ dateArrivee ne doit pas être nul");
+            }
+
+            log.info("Received request to create result for competition ID: {}", competitionId);
+
             log.info("Fetching pigeon details for bag number: {}", requestDto.numeroBague());
             Pigeon pigeon = pigeonService.findByNumeroBague(requestDto.numeroBague());
 

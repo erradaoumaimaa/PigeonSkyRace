@@ -16,7 +16,6 @@ public interface CompetionMapper {
     CompetionMapper INSTANCE = Mappers.getMapper(CompetionMapper.class);
 
     @Mappings({
-            @Mapping(source = "id", target = "id"),
             @Mapping(source = "nom", target = "nom"),
             @Mapping(source = "latitudeGPS", target = "latitudeGPS"),
             @Mapping(source = "longitudeGPS", target = "longitudeGPS"),
