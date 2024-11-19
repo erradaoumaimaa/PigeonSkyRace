@@ -26,6 +26,15 @@ public interface PigeonSaisonCompetitionMapper {
     })
     PigeonSaisonCompetitionResponseDTO toResponseDTO(PigeonSaisonCompetition entity);
 
+    @Mappings({
+            @Mapping(source = "saisonPigeonId", target = "saisonPigeonId", qualifiedByName = "objectIdToString"),
+
+            @Mapping(source = "competitionId", target = "competitionId", qualifiedByName = "objectIdToString")
+    })
+    PigeonSaisonCompetitionRequestDTO toRequestDTO(PigeonSaisonCompetition pigeonSaisonCompetition);
+
+
+
     // Méthode pour convertir un ObjectId en String
     @Named("objectIdToString")  // Ajoutez l'annotation @Named
     default String objectIdToString(ObjectId objectId) {
