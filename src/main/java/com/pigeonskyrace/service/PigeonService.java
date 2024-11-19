@@ -33,7 +33,12 @@ public class PigeonService {
     public PigeonResponseDTO createPigeon(PigeonRequestDTO pigeonRequestDTO) {
         // Récupérer le colombier via l'ID
         Colombier colombier = colombierService.findById(new ObjectId(pigeonRequestDTO.getColombierId()))
-                .orElseThrow(() -> new RuntimeException("Colombier non trouvé pour l'ID : " + pigeonRequestDTO.getColombierId()));
+                .orElseThrow(() -> new EntityNotFoundException("Colombier non trouvé pour l'ID : " + pigeonRequestDTO.getColombierId()));
+
+        // Si le numeroBague est null ou vide, générer un numeroBague
+        if (pigeonRequestDTO.getNumeroBague() == null || pigeonRequestDTO.getNumeroBague().isEmpty()) {
+            pigeonRequestDTO.setNumeroBague(generateNumeroBague(pigeonRequestDTO.getSexe(), pigeonRequestDTO.getAge()));
+        }
 
         // Mapper PigeonRequestDTO en Pigeon avec le colombier trouvé
         Pigeon pigeon = pigeonMapper.toPigeon(pigeonRequestDTO).withColombier(colombier);
@@ -44,8 +49,6 @@ public class PigeonService {
         // Retourner le DTO du Pigeon
         return pigeonMapper.toPigeonResponseDTO(savedPigeon);
     }
-
-
 
     public List<Pigeon> findByColombierId(ObjectId colombierId) {
         return pigeonRepository.findByColombierId(colombierId);

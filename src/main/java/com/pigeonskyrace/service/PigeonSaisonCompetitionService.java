@@ -47,7 +47,7 @@ public class PigeonSaisonCompetitionService {
 
     public Optional<PigeonSaisonCompetition> findBySeasonPigeonAndCompetition(SaisonPigeon saisonPigeonId, Competion competitionId) {
         try {
-            return repository.findBySaisonPigeonIdAndCompetitionId(saisonPigeonId, competitionId);
+            return repository.findBySaisonPigeonIdAndCompetitionId(saisonPigeonId.getId(), new ObjectId(competitionId.getId()));
         } catch (Exception e) {
             throw new EntityNotFoundException("No matching PigeonSaisonCompetition found for the given IDs.");
         }

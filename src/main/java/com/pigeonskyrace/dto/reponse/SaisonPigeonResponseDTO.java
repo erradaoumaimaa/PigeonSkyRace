@@ -29,6 +29,7 @@ public class SaisonPigeonResponseDTO {
 
     public SaisonPigeon toEntity() {
         SaisonPigeon saisonPigeon = new SaisonPigeon();
+        saisonPigeon.setId(this.id);
         saisonPigeon.setPigeonId(this.pigeonId);
         saisonPigeon.setSaisonId(this.saisonId);
         return saisonPigeon;
