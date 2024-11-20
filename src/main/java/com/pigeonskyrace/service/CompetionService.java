@@ -26,7 +26,7 @@ public class CompetionService {
 
     public Competion save(Competion competion) {
 
-    return competionRepository.save(competion);
+        return competionRepository.save(competion);
 
     }
     public List<Competion> findAll() {
@@ -34,29 +34,25 @@ public class CompetionService {
     }
 
 
-    public CompetionReponseDTO getCompetitionById(String competitionId) {
-        System.out.println("Looking for competition with ID: " + competitionId);
+    public CompetionReponseDTO getCompetitionid(CompetitionId competitionId) {
+        System.out.println("Looking for competition with ID: "+ competitionId.getValue());
 
-        if (!ObjectId.isValid(competitionId)) {
-            throw new IllegalArgumentException("Invalid competition ID format: " + competitionId);
+        if (!ObjectId.isValid(competitionId.getValue())) {
+            System.out.println("Invalid competition ID format: "+ competitionId.getValue());
+            throw new IllegalArgumentException("Invalid competition ID format: " + competitionId.getValue());
         }
 
-        ObjectId objectId = new ObjectId(competitionId);
+        ObjectId objectId = new ObjectId(competitionId.getValue());
 
-        System.out.println("Converted to ObjectId: " + objectId);
+        // Query repository
 
-        Competion competition = competionRepository.findById(objectId)
-                .orElseThrow(() -> new IllegalArgumentException("Competition not found with ID: " + competitionId));
+        return competionRepository.findById(objectId)
+                .map(mapper::toDto)
+                .orElseThrow(() -> {
+                    System.out.println("Competition not found for ID: " + competitionId.getValue());
+                    return new EntityNotFoundException("Competition not found for ID: " + competitionId.getValue());
+                });
 
-        System.out.println("Found competition: " + competition);
-
-        return mapper.toDto(competition);
     }
 
-
-
-
-
-
 }
-

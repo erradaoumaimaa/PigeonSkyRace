@@ -11,13 +11,14 @@ import com.pigeonskyrace.model.*;
 import com.pigeonskyrace.repository.ResultatRepository;
 import com.pigeonskyrace.utils.Coordinates;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ResultatService {
@@ -34,43 +35,62 @@ public class ResultatService {
      * Crée un résultat pour un pigeon dans une compétition et calcule sa vitesse.
      */
     public ResultatReponseDTO createResult(ResultatRequestDTO resultatRequestDTO, CompetionReponseDTO competition) throws ChangeSetPersister.NotFoundException {
-        // Vérifier l'existence du pigeon
+        log.info("Début de la création du résultat pour le numéro de bague : {}", resultatRequestDTO.numeroBague());
+
         Pigeon pigeon = pigeonService.findByNumeroBague(resultatRequestDTO.numeroBague());
         if (pigeon == null) {
+            log.error("Pigeon introuvable pour le numéro de bague : {}", resultatRequestDTO.numeroBague());
             throw new EntityNotFoundException("Pigeon introuvable pour le numéro de bague : " + resultatRequestDTO.numeroBague());
         }
+        log.info("Pigeon trouvé : {}", pigeon);
 
-        // Récupérer SaisonPigeon
-        // La méthode retourne un DTO, donc pas de vérification de null ici
         SaisonPigeonResponseDTO saisonPigeonResponseDTO = saisonPigeonService.getSaisonPigeonBySaisonIdAndPigeonId(
                 competition.getSaisonId(), pigeon.getId().toHexString());
+        log.info("SaisonPigeon récupéré : {}", saisonPigeonResponseDTO);
 
-        // Récupérer PigeonSaisonCompetition
         PigeonSaisonCompetition pigeonSaisonCompetition = pigeonSaisonCompetitionService
                 .findBySeasonPigeonAndCompetition(saisonPigeonResponseDTO.toEntity(), competionMapper.toEntityy(competition))
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Aucune participation trouvée pour le pigeon " + pigeon.getId() +
-                                " dans la compétition " + competition.getId()));
+                .orElseThrow(() -> {
+                    log.error("Aucune participation trouvée pour le pigeon {} dans la compétition {}",
+                            pigeon.getId(), competition.getId());
+                    return new EntityNotFoundException(
+                            "Aucune participation trouvée pour le pigeon " + pigeon.getId() +
+                                    " dans la compétition " + competition.getId());
+                });
+        log.info("Participation à la compétition récupérée : {}", pigeonSaisonCompetition);
 
         Resultat resultat = mapper.toEntity(resultatRequestDTO);
         resultat.setPigeonSaisonCompetition(pigeonSaisonCompetition);
+        log.info("Résultat mappé : {}", resultat);
 
-        // Calculer la distance
+
         Coordinates coordonneesColombier = colombierService.getLoftCoordinates(pigeon.getColombier().getId());
+        log.info("Coordonnées du colombier : {}", coordonneesColombier);
+
         double distance = calculerDistance(
                 coordonneesColombier.getLatitude(), coordonneesColombier.getLongitude(),
                 competition.getLatitudeGPS(), competition.getLongitudeGPS());
-
         resultat.setDistance(distance);
+        log.info("Distance calculée : {} km", distance);
 
-        // Calculer le temps de vol
+
         Duration tempsDeVol = Duration.between(competition.getStartTime(), resultat.getDateArrivee());
-        resultat.setVitesse(calculerVitesse(distance, tempsDeVol));
+        log.info("Temps de vol calculé : {} heures", tempsDeVol.toHours());
 
-        // Sauvegarder le résultat
+        // Calculer la vitesse
+        double vitesse = calculerVitesse(distance, tempsDeVol);
+        resultat.setVitesse(vitesse);
+        log.info("Vitesse calculée : {} km/h", vitesse);
+
+
         resultatRepository.save(resultat);
+        log.info("Résultat sauvegardé avec succès : {}", resultat);
 
-        return mapper.toReponseDTO(resultat);
+        // Retourner le résultat mappé en DTO
+        ResultatReponseDTO resultatReponseDTO = mapper.toReponseDTO(resultat);
+        log.info("Résultat retourné : {}", resultatReponseDTO);
+
+        return resultatReponseDTO;
     }
 
     /**
@@ -133,6 +153,9 @@ public class ResultatService {
                 + Math.cos(latRad1) * Math.cos(latRad2)
                 * Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
 
-        return 6371.01 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); // Distance en km
+        return 6371.01 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+    public List<Resultat> getResultatsByCompetitionId(String competitionId) {
+        return resultatRepository.findByPigeonSaisonCompetition_Competition_Id(competitionId);
     }
 }

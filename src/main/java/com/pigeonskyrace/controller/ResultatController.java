@@ -26,7 +26,7 @@ import java.util.List;
 @RestController
 @Validated
 @RequestMapping("/api/v1/resultats")
-    public class ResultatController {
+public class ResultatController {
 
     private final ResultatService resultatService;
     private final CompetionService competionService;
@@ -41,16 +41,8 @@ import java.util.List;
         try {
             log.info("Received request to create result for competition ID: {}", competitionId);
 
-            CompetionReponseDTO competitionDto = competionService.getCompetitionById(competitionId);
+            CompetionReponseDTO competitionDto = competionService.getCompetitionid(CompetitionId.fromString(competitionId));
             log.info("Competition details retrieved: {}", competitionDto);
-
-            log.info("Received raw request body: {}", requestDto);
-
-            if (requestDto.dateArrivee() == null) {
-                throw new IllegalArgumentException("Le champ dateArrivee ne doit pas être nul");
-            }
-
-            log.info("Received request to create result for competition ID: {}", competitionId);
 
             log.info("Fetching pigeon details for bag number: {}", requestDto.numeroBague());
             Pigeon pigeon = pigeonService.findByNumeroBague(requestDto.numeroBague());
@@ -73,7 +65,7 @@ import java.util.List;
 
     @GetMapping("/{competitionId}")
     public ResponseEntity<List<ResultatReponseDTO>> calculateResults(@PathVariable String competitionId) {
-        CompetionReponseDTO competitionDto = competionService.getCompetitionById(competitionId);
+        CompetionReponseDTO competitionDto = competionService.getCompetitionid(CompetitionId.toCompetitionId(competitionId));
         log.info("Competition details retrieved: {}", competitionDto);
         List<ResultatReponseDTO> results = resultatService.calculatePoint(competitionDto);
 
@@ -81,6 +73,5 @@ import java.util.List;
     }
 
 }
-
 
 

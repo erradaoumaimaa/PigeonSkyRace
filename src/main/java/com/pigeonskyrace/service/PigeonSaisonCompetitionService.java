@@ -27,10 +27,10 @@ public class PigeonSaisonCompetitionService {
     public PigeonSaisonCompetition registerPigeonInCompetition(PigeonSaisonCompetition pigeonSaisonCompetition) {
         // Convertir l'ID SaisonPigeon et Competition de String en ObjectId si nécessaire
         ObjectId saisonPigeonId = pigeonSaisonCompetition.getSaisonPigeon().getId();
-        ObjectId competitionId = pigeonSaisonCompetition.getCompetition().getId();
+        String competitionId = pigeonSaisonCompetition.getCompetition().getId();
 
         // Vérifier si l'inscription existe déjà
-        if (repository.existsBySaisonPigeonIdAndCompetitionId(saisonPigeonId,  (competitionId))) {
+        if (repository.existsBySaisonPigeonIdAndCompetitionId(saisonPigeonId, new ObjectId(competitionId))) {
             throw new IllegalStateException("Ce pigeon est déjà inscrit dans cette compétition.");
         }
 
@@ -41,14 +41,9 @@ public class PigeonSaisonCompetitionService {
         return savedEntity;
     }
 
-
-
-
-
-
-    public Optional<PigeonSaisonCompetition> findBySeasonPigeonAndCompetition(SaisonPigeon saisonPigeonId, Competion competitionId) {
+    public Optional<PigeonSaisonCompetition> findBySeasonPigeonAndCompetition(SaisonPigeon saisonPigeonId, Competion competion) {
         try {
-            return repository.findBySaisonPigeonIdAndCompetitionId(saisonPigeonId.getId(),(competitionId.getId()));
+            return repository.findBySaisonPigeonIdAndCompetitionId(saisonPigeonId.getId() , competion.getId());
         } catch (Exception e) {
             throw new EntityNotFoundException("No matching PigeonSaisonCompetition found for the given IDs.");
         }

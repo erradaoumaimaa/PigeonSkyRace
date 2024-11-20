@@ -16,8 +16,7 @@ public interface CompetionMapper {
     CompetionMapper INSTANCE = Mappers.getMapper(CompetionMapper.class);
 
     @Mappings({
-
-            @Mapping(source = "id", target = "id", qualifiedByName = "objectIdToString"),
+            @Mapping(source = "id", target = "id"),
             @Mapping(source = "nom", target = "nom"),
             @Mapping(source = "latitudeGPS", target = "latitudeGPS"),
             @Mapping(source = "longitudeGPS", target = "longitudeGPS"),
@@ -33,27 +32,30 @@ public interface CompetionMapper {
             @Mapping(source = "longitudeGPS", target = "longitudeGPS"),
             @Mapping(source = "nbPigeons", target = "nombrePigeons"),
             @Mapping(target = "pourcentageAdmission", constant = "25.0"),
+            @Mapping(target = "id", ignore = true),
             @Mapping(target = "saison", ignore = true)
     })
     Competion toEntity(CompetionRequestDTO competitionRequestDTO);
 
-
     @Mappings({
-            @Mapping(source = "id", target = "id", qualifiedByName = "stringToObjectId"),
             @Mapping(source = "nom", target = "nom"),
             @Mapping(source = "latitudeGPS", target = "latitudeGPS"),
             @Mapping(source = "longitudeGPS", target = "longitudeGPS"),
             @Mapping(source = "nbPigeons", target = "nombrePigeons"),
             @Mapping(target = "pourcentageAdmission", constant = "25.0"),
+//            @Mapping(target = "id", ignore = true),
             @Mapping(target = "saison", ignore = true)
     })
     Competion toEntityy(CompetionReponseDTO competitionReponseDTO);
 
+
+    // Map ObjectId to String
     @Named("objectIdToString")
     default String objectIdToString(ObjectId objectId) {
         return objectId != null ? objectId.toHexString() : null;
     }
 
+    // Map String to ObjectId
     @Named("stringToObjectId")
     default ObjectId stringToObjectId(String id) {
         return id != null ? new ObjectId(id) : null;
