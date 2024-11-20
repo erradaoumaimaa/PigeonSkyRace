@@ -27,7 +27,7 @@ public class PdfController {
     @GetMapping("/api/v1/resultats/{competitionId}/pdf")
     public ResponseEntity<byte[]> generateCompetitionPdf(@PathVariable String competitionId) throws DocumentException, IOException {
         // Récupérer les informations de la compétition à partir de la base de données
-        CompetionReponseDTO competionResult = competionService.getCompetitionid(new CompetitionId(competitionId));
+        CompetionReponseDTO competionResult = competionService.getCompetitionById(competitionId);
 
         // Générer le PDF avec les informations de la compétition
         byte[] pdfBytes = pdfGenerationService.generateCompetitionResultPdf(competionResult);

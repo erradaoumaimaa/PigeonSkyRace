@@ -34,27 +34,25 @@ public class CompetionService {
     }
 
 
-    public CompetionReponseDTO getCompetitionid(CompetitionId competitionId) {
-        System.out.println("Looking for competition with ID: "+ competitionId.getValue());
+    public CompetionReponseDTO getCompetitionById(String competitionId) {
+        System.out.println("Looking for competition with ID: " + competitionId);
 
-        // Validate ID format
-        if (!ObjectId.isValid(competitionId.getValue())) {
-            System.out.println("Invalid competition ID format: "+ competitionId.getValue());
-            throw new IllegalArgumentException("Invalid competition ID format: " + competitionId.getValue());
+        if (!ObjectId.isValid(competitionId)) {
+            throw new IllegalArgumentException("Invalid competition ID format: " + competitionId);
         }
 
-        ObjectId objectId = new ObjectId(competitionId.getValue());
+        ObjectId objectId = new ObjectId(competitionId);
 
-        // Query repository
+        System.out.println("Converted to ObjectId: " + objectId);
 
-        return competionRepository.findById(objectId)
-                .map(mapper::toDto)
-                .orElseThrow(() -> {
-                    System.out.println("Competition not found for ID: " + competitionId.getValue());
-                    return new EntityNotFoundException("Competition not found for ID: " + competitionId.getValue());
-                });
+        Competion competition = competionRepository.findById(objectId)
+                .orElseThrow(() -> new IllegalArgumentException("Competition not found with ID: " + competitionId));
 
+        System.out.println("Found competition: " + competition);
+
+        return mapper.toDto(competition);
     }
+
 
 
 

@@ -41,7 +41,7 @@ import java.util.List;
         try {
             log.info("Received request to create result for competition ID: {}", competitionId);
 
-            CompetionReponseDTO competitionDto = competionService.getCompetitionid(CompetitionId.fromString(competitionId));
+            CompetionReponseDTO competitionDto = competionService.getCompetitionById(competitionId);
             log.info("Competition details retrieved: {}", competitionDto);
 
             log.info("Received raw request body: {}", requestDto);
@@ -73,7 +73,7 @@ import java.util.List;
 
     @GetMapping("/{competitionId}")
     public ResponseEntity<List<ResultatReponseDTO>> calculateResults(@PathVariable String competitionId) {
-        CompetionReponseDTO competitionDto = competionService.getCompetitionid(CompetitionId.toCompetitionId(competitionId));
+        CompetionReponseDTO competitionDto = competionService.getCompetitionById(competitionId);
         log.info("Competition details retrieved: {}", competitionDto);
         List<ResultatReponseDTO> results = resultatService.calculatePoint(competitionDto);
 
