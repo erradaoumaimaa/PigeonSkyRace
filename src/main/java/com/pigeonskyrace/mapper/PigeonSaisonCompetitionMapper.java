@@ -13,7 +13,9 @@ import org.mapstruct.Named;
 public interface PigeonSaisonCompetitionMapper {
 
     @Mappings({
-            @Mapping(target = "id", ignore = true)
+            @Mapping(target = "id", ignore = true),
+            @Mapping(source = "saisonPigeonId", target = "saisonPigeon.id"),
+            @Mapping(source = "competitionId", target = "competition.id")
     })
     PigeonSaisonCompetition toEntity(PigeonSaisonCompetitionRequestDTO requestDTO);
 
@@ -39,4 +41,9 @@ public interface PigeonSaisonCompetitionMapper {
     default ObjectId stringToObjectId(String id) {
         return id != null && !id.isEmpty() ? new ObjectId(id) : null;
     }
+
+    default ObjectId map(String id) {
+        return id != null && !id.isEmpty() ? new ObjectId(id) : null;
+    }
+
 }

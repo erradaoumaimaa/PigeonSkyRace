@@ -37,7 +37,6 @@ public class CompetionService {
     public CompetionReponseDTO getCompetitionid(CompetitionId competitionId) {
         System.out.println("Looking for competition with ID: "+ competitionId.getValue());
 
-        // Validate ID format
         if (!ObjectId.isValid(competitionId.getValue())) {
             System.out.println("Invalid competition ID format: "+ competitionId.getValue());
             throw new IllegalArgumentException("Invalid competition ID format: " + competitionId.getValue());
@@ -55,10 +54,6 @@ public class CompetionService {
                 });
 
     }
-
-
-
-
 
 }
 

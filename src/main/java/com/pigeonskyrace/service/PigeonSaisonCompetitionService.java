@@ -41,14 +41,9 @@ public class PigeonSaisonCompetitionService {
         return savedEntity;
     }
 
-
-
-
-
-
     public Optional<PigeonSaisonCompetition> findBySeasonPigeonAndCompetition(SaisonPigeon saisonPigeonId, Competion competitionId) {
         try {
-            return repository.findBySaisonPigeonIdAndCompetitionId(saisonPigeonId.getId(),new ObjectId(competitionId.getId()));
+            return repository.findBySaisonPigeonIdAndCompetitionId(saisonPigeonId.getId() , competitionId.getId());
         } catch (Exception e) {
             throw new EntityNotFoundException("No matching PigeonSaisonCompetition found for the given IDs.");
         }

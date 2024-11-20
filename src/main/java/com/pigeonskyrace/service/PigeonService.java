@@ -69,10 +69,10 @@ public class PigeonService {
     private String generateNumeroBague(Sexe sexe, Integer age) {
         String prefix = (sexe == Sexe.FEMALE) ? "F" : "M";
         Random rand = new Random();
-        int n = rand.nextInt(90) + 10; // Génère un nombre à deux chiffres
+        int n = rand.nextInt(90) + 10;
         // Calcul de l'année de naissance
         int birthYear = LocalDate.now().minusYears(age).getYear();
-        String yearSuffix = String.valueOf(birthYear).substring(2); // Prend les deux derniers chiffres de l'année
+        String yearSuffix = String.valueOf(birthYear).substring(2);
         return prefix + "**" + n + "-" + yearSuffix;
     }
 }

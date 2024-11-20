@@ -133,6 +133,9 @@ public class ResultatService {
                 + Math.cos(latRad1) * Math.cos(latRad2)
                 * Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
 
-        return 6371.01 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); // Distance en km
+        return 6371.01 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+    public List<Resultat> getResultatsByCompetitionId(String competitionId) {
+        return resultatRepository.findByPigeonSaisonCompetition_Competition_Id(competitionId);
     }
 }
