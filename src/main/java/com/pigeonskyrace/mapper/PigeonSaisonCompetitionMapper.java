@@ -21,6 +21,8 @@ public interface PigeonSaisonCompetitionMapper {
 
     @Mappings({
             @Mapping(source = "id", target = "id", qualifiedByName = "objectIdToString"),
+            @Mapping(target = "saisonPigeonId",expression = "java(entity.getSaisonPigeon().getId().toHexString())"),
+            @Mapping(target = "competitionId",expression = "java(entity.getCompetition().getId().toHexString())"),
     })
     PigeonSaisonCompetitionResponseDTO toResponseDTO(PigeonSaisonCompetition entity);
 

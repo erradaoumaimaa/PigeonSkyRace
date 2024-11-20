@@ -16,8 +16,6 @@ public class SaisonPigeon {
 
     @MongoId
     private ObjectId id;
-    private ObjectId saisonId;
-    private ObjectId pigeonId;
 
     @DBRef
     private Saison saison;

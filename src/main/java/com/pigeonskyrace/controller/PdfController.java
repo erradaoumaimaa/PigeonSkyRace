@@ -8,6 +8,7 @@ import com.pigeonskyrace.service.CompetionService;
 import com.pigeonskyrace.service.PdfGenerationService;
 import com.pigeonskyrace.service.ResultatService;
 import com.pigeonskyrace.utils.CompetitionId;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -32,11 +33,10 @@ public class PdfController {
     private ResultatService resultatService;
     @GetMapping("/api/v1/resultats/{competitionId}/pdf")
     public ResponseEntity<byte[]> generateCompetitionPdf(@PathVariable String competitionId) throws DocumentException, IOException {
-        CompetitionId competitionIdObj = CompetitionId.fromString(competitionId);
+    ObjectId  competition=  new ObjectId(competitionId);
+        CompetionReponseDTO competionResult = competionService.getCompetitionid(competition);
 
-        CompetionReponseDTO competionResult = competionService.getCompetitionid(competitionIdObj);
-
-        List<Resultat> resultats = resultatService.getResultatsByCompetitionId(competitionIdObj.getValue());
+        List<Resultat> resultats = resultatService.getResultatsByCompetitionId(competition);
         if (resultats.isEmpty()) {
             throw new EntityNotFoundException("Aucun résultat trouvé pour la compétition avec l'ID : " + competitionId);
         }

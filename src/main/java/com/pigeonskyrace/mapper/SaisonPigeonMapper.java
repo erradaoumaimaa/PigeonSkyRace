@@ -15,9 +15,10 @@ public interface SaisonPigeonMapper {
 
     SaisonPigeonMapper INSTANCE = Mappers.getMapper(SaisonPigeonMapper.class);
 
-    @Mapping(target = "saisonId", expression = "java(new org.bson.types.ObjectId(saisonId))")
-    SaisonPigeon toEntity(SaisonPigeonRequestDTO dto, String saisonId);
-
+    SaisonPigeon toEntity(SaisonPigeonRequestDTO dto);
+    @Mapping(target = "id",expression = "java(saisonPigeon.getId().toHexString())")
+    @Mapping(target = "saison",expression = "java(saisonPigeon.getSaison().getId().toHexString())")
+    @Mapping(target = "pigeon",expression = "java(saisonPigeon.getPigeon().getId().toHexString())")
     SaisonPigeonResponseDTO toDto(SaisonPigeon saisonPigeon);
 }
 

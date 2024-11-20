@@ -13,6 +13,7 @@ import com.pigeonskyrace.utils.ResponseApi;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,9 +40,8 @@ public class ResultatController {
             @RequestBody @Valid ResultatRequestDTO requestDto) {
 
         try {
-            log.info("Received request to create result for competition ID: {}", competitionId);
 
-            CompetionReponseDTO competitionDto = competionService.getCompetitionid(CompetitionId.fromString(competitionId));
+            CompetionReponseDTO competitionDto = competionService.getCompetitionid(new ObjectId(competitionId));
             log.info("Competition details retrieved: {}", competitionDto);
 
             log.info("Fetching pigeon details for bag number: {}", requestDto.numeroBague());
@@ -65,7 +65,7 @@ public class ResultatController {
 
     @GetMapping("/{competitionId}")
     public ResponseEntity<List<ResultatReponseDTO>> calculateResults(@PathVariable String competitionId) {
-        CompetionReponseDTO competitionDto = competionService.getCompetitionid(CompetitionId.toCompetitionId(competitionId));
+        CompetionReponseDTO competitionDto = competionService.getCompetitionid(new ObjectId(competitionId));
         log.info("Competition details retrieved: {}", competitionDto);
         List<ResultatReponseDTO> results = resultatService.calculatePoint(competitionDto);
 

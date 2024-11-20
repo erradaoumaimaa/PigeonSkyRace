@@ -12,10 +12,12 @@ import com.pigeonskyrace.repository.ResultatRepository;
 import com.pigeonskyrace.utils.Coordinates;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @Slf4j
@@ -98,7 +100,11 @@ public class ResultatService {
      */
     public List<ResultatReponseDTO> calculatePoint(CompetionReponseDTO competitionDto) {
         // Utilisation de la méthode modifiée dans ResultatRepository
-        List<Resultat> resultats = resultatRepository.findByPigeonSaisonCompetition_Competition_Id(competitionDto.getId());
+        List<PigeonSaisonCompetition> pigeonSaisonCompetitions = pigeonSaisonCompetitionService.findByCompetition(competionMapper.toEntityy(competitionDto));
+        List<Resultat> resultats = new ArrayList<>();
+        for(PigeonSaisonCompetition cp : pigeonSaisonCompetitions) {
+            resultats.add(resultatRepository.findByPigeonSaisonCompetition(cp));
+        }
 
         if (resultats.isEmpty()) {
             throw new EntityNotFoundException("Aucun résultat trouvé pour cette compétition.");
@@ -155,7 +161,12 @@ public class ResultatService {
 
         return 6371.01 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     }
-    public List<Resultat> getResultatsByCompetitionId(String competitionId) {
-        return resultatRepository.findByPigeonSaisonCompetition_Competition_Id(competitionId);
+    public List<Resultat> getResultatsByCompetitionId(ObjectId competitionId) {
+        List<PigeonSaisonCompetition> pigeonSaisonCompetitions = pigeonSaisonCompetitionService.findByCompetitionId(competitionId);
+        List<Resultat> resultats = new ArrayList<>();
+        for(PigeonSaisonCompetition cp : pigeonSaisonCompetitions) {
+            resultats.add(resultatRepository.findByPigeonSaisonCompetition(cp));
+        }
+        return resultats;
     }
 }

@@ -17,7 +17,7 @@ import jakarta.validation.Valid;
 public class PigeonSeasonCompetitionController {
 
     @Autowired
-    private PigeonSaisonCompetitionService service;
+    private final PigeonSaisonCompetitionService service;
     private final PigeonSaisonCompetitionMapper pigeonSaisonCompetitionMapper;
 
     @PostMapping("/{competitionId}")
@@ -25,19 +25,11 @@ public class PigeonSeasonCompetitionController {
             @PathVariable String competitionId,
             @Valid @RequestBody PigeonSaisonCompetitionRequestDTO requestDTO) {
 
-        // Assigner l'ID de la compétition au DTO (le cas échéant)
         requestDTO.setCompetitionId(competitionId);
 
-        // Mapper le requestDTO en entité PigeonSaisonCompetition
-        PigeonSaisonCompetition pigeonSaisonCompetition = pigeonSaisonCompetitionMapper.toEntity(requestDTO);
+        PigeonSaisonCompetitionResponseDTO savedEntity = service.registerPigeonInCompetition(requestDTO);
 
-        // Appeler le service avec l'entité
-        PigeonSaisonCompetition savedEntity = service.registerPigeonInCompetition(pigeonSaisonCompetition);
-
-        // Mapper l'entité enregistrée en DTO de réponse
-        PigeonSaisonCompetitionResponseDTO responseDTO = pigeonSaisonCompetitionMapper.toResponseDTO(savedEntity);
-
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.ok(savedEntity);
     }
 
 }

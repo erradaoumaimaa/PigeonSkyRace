@@ -1,5 +1,7 @@
 package com.pigeonskyrace.service;
 
+import com.pigeonskyrace.dto.reponse.PigeonSaisonCompetitionResponseDTO;
+import com.pigeonskyrace.dto.request.PigeonSaisonCompetitionRequestDTO;
 import com.pigeonskyrace.exception.EntityNotFoundException;
 import com.pigeonskyrace.mapper.PigeonSaisonCompetitionMapper;
 import com.pigeonskyrace.model.Competion;
@@ -7,6 +9,7 @@ import com.pigeonskyrace.model.PigeonSaisonCompetition;
 import com.pigeonskyrace.model.SaisonPigeon;
 import com.pigeonskyrace.repository.PigeonSaisonCompetitionRepository;
 import com.pigeonskyrace.utils.CompetitionId;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,29 +19,27 @@ import java.util.List;
 import java.util.Optional;
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class PigeonSaisonCompetitionService {
 
-    @Autowired
-    private PigeonSaisonCompetitionRepository repository;
 
-    @Autowired
-    private PigeonSaisonCompetitionMapper mapper;
+    private final PigeonSaisonCompetitionRepository repository;
+    private final PigeonSaisonCompetitionMapper mapper;
 
-    public PigeonSaisonCompetition registerPigeonInCompetition(PigeonSaisonCompetition pigeonSaisonCompetition) {
-        // Convertir l'ID SaisonPigeon et Competition de String en ObjectId si nécessaire
+    public PigeonSaisonCompetitionResponseDTO registerPigeonInCompetition(PigeonSaisonCompetitionRequestDTO requestDTO) {
+
+        PigeonSaisonCompetition pigeonSaisonCompetition = mapper.toEntity(requestDTO);
         ObjectId saisonPigeonId = pigeonSaisonCompetition.getSaisonPigeon().getId();
-        String competitionId = pigeonSaisonCompetition.getCompetition().getId();
+        ObjectId competitionId = pigeonSaisonCompetition.getCompetition().getId();
 
-        // Vérifier si l'inscription existe déjà
-        if (repository.existsBySaisonPigeonIdAndCompetitionId(saisonPigeonId, new ObjectId(competitionId))) {
+
+        if (repository.existsBySaisonPigeonIdAndCompetitionId(saisonPigeonId, competitionId)) {
             throw new IllegalStateException("Ce pigeon est déjà inscrit dans cette compétition.");
         }
 
-        // Sauvegarder l'inscription du pigeon dans la compétition
-        PigeonSaisonCompetition savedEntity = repository.save(pigeonSaisonCompetition);
+        return  mapper.toResponseDTO(repository.save(pigeonSaisonCompetition));
 
-        // Retourner l'entité directement, pas un DTO
-        return savedEntity;
+
     }
 
     public Optional<PigeonSaisonCompetition> findBySeasonPigeonAndCompetition(SaisonPigeon saisonPigeonId, Competion competion) {
@@ -55,6 +56,8 @@ public class PigeonSaisonCompetitionService {
     }
 
 
-
+public List <PigeonSaisonCompetition> findByCompetitionId(ObjectId id){
+        return  repository.findByCompetition_Id(id).orElseThrow(()-> new EntityNotFoundException("pigeonSaisonCompetition id not found"));
+}
 }
 

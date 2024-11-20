@@ -22,10 +22,5 @@ public class ResultatReponseDTO {
 
         private Double points;
 
-        @DBRef
-        PigeonSaisonCompetition pigeonSaisonCompetition;
-
-        @CreatedDate
-        LocalDateTime dateCréation;
 
 }

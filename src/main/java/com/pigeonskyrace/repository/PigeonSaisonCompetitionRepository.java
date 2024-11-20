@@ -17,4 +17,5 @@ public interface PigeonSaisonCompetitionRepository extends MongoRepository<Pigeo
     @Query("{ 'saisonPigeon.$id' : ?0, 'competition.$id' : ?1 }")
     Optional<PigeonSaisonCompetition> findBySaisonPigeonIdAndCompetitionId(ObjectId saisonPigeonId, ObjectId competitionId);
    Optional< List<PigeonSaisonCompetition>>findAllByCompetition(Competion competion);
+   Optional<List<PigeonSaisonCompetition>>findByCompetition_Id(ObjectId competitionId);
 }

@@ -34,23 +34,12 @@ public class CompetionService {
     }
 
 
-    public CompetionReponseDTO getCompetitionid(CompetitionId competitionId) {
-        System.out.println("Looking for competition with ID: "+ competitionId.getValue());
+    public CompetionReponseDTO getCompetitionid(ObjectId competitionId) {
 
-        if (!ObjectId.isValid(competitionId.getValue())) {
-            System.out.println("Invalid competition ID format: "+ competitionId.getValue());
-            throw new IllegalArgumentException("Invalid competition ID format: " + competitionId.getValue());
-        }
-
-        ObjectId objectId = new ObjectId(competitionId.getValue());
-
-        // Query repository
-
-        return competionRepository.findById(objectId)
+        return competionRepository.findById(competitionId)
                 .map(mapper::toDto)
                 .orElseThrow(() -> {
-                    System.out.println("Competition not found for ID: " + competitionId.getValue());
-                    return new EntityNotFoundException("Competition not found for ID: " + competitionId.getValue());
+                    return new EntityNotFoundException("Competition not found for ID: " + competitionId);
                 });
 
     }

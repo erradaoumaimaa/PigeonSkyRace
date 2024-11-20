@@ -9,6 +9,7 @@ import com.pigeonskyrace.model.Colombier;
 import com.pigeonskyrace.model.Pigeon;
 import com.pigeonskyrace.model.enums.Sexe;
 import com.pigeonskyrace.repository.PigeonRepository;
+import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,17 +19,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-
+@RequiredArgsConstructor
 @Service
 public class PigeonService {
-    @Autowired
-    private  PigeonRepository pigeonRepository;
 
-    @Autowired
-    private  ColombierService colombierService;
-
-    @Autowired
-    private PigeonMapper pigeonMapper;
+    private final PigeonRepository pigeonRepository;
+    private final ColombierService colombierService;
+    private final PigeonMapper pigeonMapper;
 
     public PigeonResponseDTO createPigeon(PigeonRequestDTO pigeonRequestDTO) {
         // Récupérer le colombier via l'ID
@@ -63,6 +60,11 @@ public class PigeonService {
     public Pigeon findByNumeroBague(String numeroBague) {
         return pigeonRepository.findByNumeroBague(numeroBague)
                 .orElseThrow(() -> new EntityNotFoundException("Pigeon avec numéro de bague " + numeroBague + " introuvable"));
+    }
+
+    public Pigeon findById(ObjectId id) {
+
+        return pigeonRepository.findById(id).orElseThrow(()->new EntityNotFoundException("pigeon not found"));
     }
 
     // Génère un numéro de bague basé sur le sexe et l'âge

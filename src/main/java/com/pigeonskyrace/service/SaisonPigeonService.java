@@ -1,31 +1,40 @@
 package com.pigeonskyrace.service;
 
 import com.pigeonskyrace.dto.reponse.SaisonPigeonResponseDTO;
+import com.pigeonskyrace.dto.request.PigeonRequestDTO;
 import com.pigeonskyrace.dto.request.SaisonPigeonRequestDTO;
 import com.pigeonskyrace.exception.EntityNotFoundException;
 import com.pigeonskyrace.mapper.SaisonPigeonMapper;
+import com.pigeonskyrace.model.Pigeon;
+import com.pigeonskyrace.model.Saison;
 import com.pigeonskyrace.model.SaisonPigeon;
 import com.pigeonskyrace.repository.SaisonPigeonRepository;
+import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class SaisonPigeonService {
 
-    @Autowired
-    private SaisonPigeonRepository saisonPigeonRepository;
+    private final SaisonPigeonRepository saisonPigeonRepository;
+    private final SaisonPigeonMapper saisonPigeonMapper;
 
-    @Autowired
-    private SaisonPigeonMapper saisonPigeonMapper;
-
-    public SaisonPigeonResponseDTO addPigeonToSaison(String saisonId, SaisonPigeonRequestDTO requestDTO) {
-        SaisonPigeon saisonPigeon = saisonPigeonMapper.toEntity(requestDTO, saisonId);
+    public SaisonPigeonResponseDTO addPigeonToSaison(Saison saison, Pigeon pigeon) {
+        saisonPigeonRepository.findBySaisonIdAndPigeonId(saison.getId(),pigeon.getId()).ifPresent(
+                existingPigeon -> {
+                    throw new EntityNotFoundException("this pigeon already exists");
+                }
+        );
+        SaisonPigeon saisonPigeon= new SaisonPigeon();
+        saisonPigeon.setSaison(saison);
+        saisonPigeon.setPigeon(pigeon);
         SaisonPigeon savedSaisonPigeon = saisonPigeonRepository.save(saisonPigeon);
+
         return saisonPigeonMapper.toDto(savedSaisonPigeon);
     }
 
-    // Méthode pour obtenir une association spécifique par ID
     public SaisonPigeonResponseDTO getSaisonPigeonById(String id) {
         SaisonPigeon saisonPigeon = saisonPigeonRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("SaisonPigeon not found with ID: " + id));

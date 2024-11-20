@@ -16,7 +16,7 @@ public interface CompetionMapper {
     CompetionMapper INSTANCE = Mappers.getMapper(CompetionMapper.class);
 
     @Mappings({
-            @Mapping(source = "id", target = "id"),
+            @Mapping(target = "id",expression = "java(competition.getId().toHexString())"),
             @Mapping(source = "nom", target = "nom"),
             @Mapping(source = "latitudeGPS", target = "latitudeGPS"),
             @Mapping(source = "longitudeGPS", target = "longitudeGPS"),
@@ -43,7 +43,7 @@ public interface CompetionMapper {
             @Mapping(source = "longitudeGPS", target = "longitudeGPS"),
             @Mapping(source = "nbPigeons", target = "nombrePigeons"),
             @Mapping(target = "pourcentageAdmission", constant = "25.0"),
-//            @Mapping(target = "id", ignore = true),
+          @Mapping(target = "id", expression= "java(new ObjectId(competitionReponseDTO.getId()))"),
             @Mapping(target = "saison", ignore = true)
     })
     Competion toEntityy(CompetionReponseDTO competitionReponseDTO);
