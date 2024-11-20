@@ -37,7 +37,7 @@ public class PdfController {
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=competition_results.pdf");
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
 
-        // Retourner la réponse avec le PDF généré
+
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(pdfBytes);
