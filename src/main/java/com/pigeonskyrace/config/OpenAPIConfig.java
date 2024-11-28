@@ -1,4 +1,4 @@
-package com.citronix.citronix.config;
+package com.pigeonskyrace.config;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -15,7 +15,7 @@ public class OpenAPIConfig {
     @Bean
     public OpenAPI openAPI() {
         Server devServer = new Server();
-        devServer.setUrl("http://localhost:8080");
+        devServer.setUrl("http://localhost:8082");
         devServer.setDescription("Server URL in Development environment");
 
         Contact contact = new Contact();
@@ -24,7 +24,7 @@ public class OpenAPIConfig {
 
 
         Info info = new Info()
-                .title("Farm Management API")
+                .title("PigeonSkyRace API")
                 .version("1.0")
                 .contact(contact)
                 .description("This API exposes endpoints to manage farms.");
@@ -34,3 +34,9 @@ public class OpenAPIConfig {
                 .servers(List.of(devServer));
     }
 }
+
+
+
+
+
+
